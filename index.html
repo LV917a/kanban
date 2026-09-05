@@ -52,80 +52,80 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{display:flex;min-height:100vh;font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(160deg,#E7F0FC 0%,#DCEBFB 50%,#EAF3FD 100%);color:#1F2937}
-.sidebar{width:226px;background:linear-gradient(180deg,#141F33 0%,#1A2A44 60%,#1F3250 100%);color:#C7D0E0;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+body{display:flex;min-height:100vh;font-family:'Microsoft YaHei UI','PingFang SC','Noto Sans CJK SC',Arial,sans-serif;background:#edf4fd;color:#101828;font-synthesis:none}
+.sidebar{width:226px;background:#102b54;color:#c7d0e0;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
 .logo{display:flex;align-items:center;gap:10px;padding:0 18px;margin-bottom:20px}
-.logo .lg-ico{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#5B5FEF,#8B5CF6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+.logo .lg-ico{width:36px;height:36px;border-radius:10px;background:#286fd8;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
 .logo h1{font-size:15px;font-weight:600;color:#fff;letter-spacing:.3px}
-.logo .lg-sub{font-size:11px;color:#6B7A99;margin-top:2px}
-.sec-title{font-size:11px;color:#5A6A86;padding:14px 18px 6px;letter-spacing:1px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:#A7B3C8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent;transition:.15s;cursor:pointer}
-.nav-item:hover{background:#1A2A44;color:#fff}
-.nav-item.active{background:#1A2A44;color:#fff;border-left-color:#5B5FEF}
-.nv-dot{width:7px;height:7px;border-radius:50%;background:#5B5FEF;flex-shrink:0}
-.nv-num{width:18px;height:18px;border-radius:50%;background:#23385A;color:#8FA3C0;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo .lg-sub{font-size:11px;color:#7f8da1;margin-top:2px}
+.sec-title{font-size:11px;color:#607187;padding:14px 18px 6px;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:#a7b3c8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent;transition:.15s;cursor:pointer}
+.nav-item:hover{background:#174575;color:#fff}
+.nav-item.active{background:#174575;color:#fff;border-left-color:#286fd8}
+.nv-dot{width:7px;height:7px;border-radius:50%;background:#286fd8;flex-shrink:0}
+.nv-num{width:18px;height:18px;border-radius:50%;background:#174575;color:#8fa3c0;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .side-foot{margin-top:auto;padding:14px 16px 0}
 .user-card{display:flex;align-items:center;gap:10px;background:#16233A;border-radius:12px;padding:12px}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.user-name{font-size:13px;color:#E2E8F0;display:flex;align-items:center;gap:6px}
-.online-dot{width:7px;height:7px;border-radius:50%;background:#22C55E}
-.user-mail{font-size:11px;color:#6B7A99;margin-top:2px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#286fd8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.user-name{font-size:13px;color:#e2e8f0;display:flex;align-items:center;gap:6px}
+.online-dot{width:7px;height:7px;border-radius:50%;background:#16a978}
+.user-mail{font-size:11px;color:#7f8da1;margin-top:2px}
 .main{flex:1;padding:20px 22px;overflow-y:auto}
-.topbar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E6EFF9;border-radius:12px;padding:14px 18px;margin-bottom:18px;box-shadow:0 1px 4px rgba(30,58,95,.08);flex-wrap:wrap}
-.tb-title{font-size:18px;font-weight:700;margin-right:4px;color:#1F2937}
-.tb-sub{font-size:12px;color:#64748B;margin-right:8px}
-.tb-sep{width:1px;height:22px;background:#E6EFF9;margin:0 4px}
-.filter-pill{padding:7px 15px;border-radius:999px;font-size:13px;cursor:pointer;background:#F1F6FC;color:#475569;border:1px solid #D9E6F5;transition:.15s;user-select:none}
-.filter-pill.on{background:#3B6FE0;color:#fff;border-color:#3B6FE0}
-.select{border:1px solid #D9E6F5;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;color:#475569;outline:none}
+.topbar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #d9e5f5;border-radius:13px;padding:14px 18px;margin-bottom:18px;box-shadow:0 7px 24px rgba(40,111,216,.07);flex-wrap:wrap}
+.tb-title{font-size:18px;font-weight:700;margin-right:4px;color:#101828}
+.tb-sub{font-size:12px;color:#607187;margin-right:8px}
+.tb-sep{width:1px;height:22px;background:#d9e5f5;margin:0 4px}
+.filter-pill{padding:7px 15px;border-radius:999px;font-size:13px;cursor:pointer;background:#f5f9ff;color:#2f4058;border:1px solid #bad0eb;transition:.15s;user-select:none}
+.filter-pill.on{background:#286fd8;color:#fff;border-color:#286fd8}
+.select{border:1px solid #bad0eb;border-radius:9px;padding:7px 10px;font-size:13px;background:#fff;color:#2f4058;outline:none}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.bell{position:relative;font-size:18px;cursor:pointer;color:#64748B}
-.bell::after{content:'';position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:#EF4444}
-.btn-up{background:#3B6FE0;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer}
-.btn-re{background:#14B8A6;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer}
+.bell{position:relative;font-size:18px;cursor:pointer;color:#607187}
+.bell::after{content:'';position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:#df4b51}
+.btn-up{background:#286fd8;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;cursor:pointer}
+.btn-re{background:#16a978;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;cursor:pointer}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:18px}
-.card{background:#fff;border:1px solid #E6EFF9;border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(30,58,95,.08)}
+.card{background:#fff;border:1px solid #d9e5f5;border-radius:13px;padding:16px;box-shadow:0 7px 24px rgba(40,111,216,.07)}
 .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .kpi-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
 .ring{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.ring-in{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#64748B;font-weight:600}
-.kpi-label{font-size:12px;color:#6B7280;margin-bottom:4px}
-.kpi-val{font-size:22px;font-weight:800;color:#1F2937}
-.kpi-val .unit{font-size:12px;font-weight:500;color:#9CA3AF;margin-left:2px}
+.ring-in{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#607187;font-weight:600}
+.kpi-label{font-size:12px;color:#607187;margin-bottom:4px}
+.kpi-val{font-size:32px;font-weight:700;color:#101828;font-family:'DIN Alternate','Roboto Mono',Arial,sans-serif;letter-spacing:-.5px}
+.kpi-val .unit{font-size:12px;font-weight:500;color:#7f8da1;margin-left:2px}
 .kpi-foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:11px}
-.kpi-target{color:#9CA3AF}
+.kpi-target{color:#7f8da1}
 .kpi-chg{font-weight:600}
 .grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-bottom:14px}
 .grid23{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .chart{height:320px}
-.card h3{font-size:15px;font-weight:600;margin-bottom:4px;color:#1F2937}
-.card .sub-t{font-size:12px;color:#9CA3AF;margin-bottom:8px}
+.card h3{font-size:17px;font-weight:700;margin-bottom:4px;color:#101828}
+.card .sub-t{font-size:12px;color:#7f8da1;margin-bottom:8px}
 .bchannel{margin-bottom:14px}
 .btabs{display:flex;gap:8px;margin-bottom:8px}
-.btab{padding:6px 16px;border-radius:999px;font-size:13px;cursor:pointer;background:#F1F6FC;color:#475569;border:1px solid #D9E6F5;transition:.15s;user-select:none}
-.btab.on{background:#3B6FE0;color:#fff;border-color:#3B6FE0}
+.btab{padding:6px 16px;border-radius:999px;font-size:13px;cursor:pointer;background:#f5f9ff;color:#2f4058;border:1px solid #bad0eb;transition:.15s;user-select:none}
+.btab.on{background:#286fd8;color:#fff;border-color:#286fd8}
 table{width:100%;border-collapse:collapse;font-size:13px}
 .filter-row{display:flex;gap:8px;margin-bottom:10px}
-.drill-bar{display:flex;align-items:center;justify-content:space-between;background:#EEF4FF;border:1px solid #BFD5F7;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#3B6FE0}
-.drill-clear{border:none;background:transparent;color:#3B6FE0;font-size:12px;cursor:pointer;font-weight:600}
-.search-input{border:1px solid #D9E6F5;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;color:#475569;outline:none;flex:1}
+.drill-bar{display:flex;align-items:center;justify-content:space-between;background:#eaf3ff;border:1px solid #bad0eb;border-radius:9px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#286fd8}
+.drill-clear{border:none;background:transparent;color:#286fd8;font-size:12px;cursor:pointer;font-weight:600}
+.search-input{border:1px solid #bad0eb;border-radius:9px;padding:7px 10px;font-size:13px;background:#fff;color:#2f4058;outline:none;flex:1}
 #topTable thead th{cursor:pointer;user-select:none;white-space:nowrap}
-#topTable thead th:hover{background:#EDF3FC}
-.sort-arrow{font-size:10px;color:#9CA3AF}
+#topTable thead th:hover{background:#f5f9ff}
+.sort-arrow{font-size:10px;color:#7f8da1}
 .sort-arrow.asc::after{content:' ▲'}
 .sort-arrow.desc::after{content:' ▼'}
 .prod-name{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .scroll-table{max-height:300px;overflow-y:auto;border-radius:8px}
-.scroll-table table thead th{position:sticky;top:0;z-index:2;box-shadow:0 1px 0 #EFF3F9}
-th,td{padding:10px 10px;text-align:left;border-bottom:1px solid #EFF3F9;color:#374151}
-th{color:#6B7280;font-weight:500;background:#F7FAFD}
+.scroll-table table thead th{position:sticky;top:0;z-index:2;box-shadow:0 1px 0 #d9e5f5}
+th,td{padding:10px 10px;text-align:left;border-bottom:1px solid #d9e5f5;color:#2f4058}
+th{color:#607187;font-weight:500;background:#f8fbff}
 .tag{color:#fff;padding:3px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
-.num{font-weight:600;color:#F97316}
-.ap-row{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #EFF3F9}
-.ap-cat{font-size:14px;font-weight:500;color:#374151}
+.num{font-weight:600;color:#286fd8}
+.ap-row{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #d9e5f5}
+.ap-cat{font-size:14px;font-weight:500;color:#2f4058}
 ul.other{list-style:none;padding:0}
-ul.other li{padding:12px 4px;border-bottom:1px solid #EFF3F9;font-size:14px;color:#374151}
+ul.other li{padding:12px 4px;border-bottom:1px solid #d9e5f5;font-size:14px;color:#2f4058}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2,.grid3,.grid23{grid-template-columns:1fr}}
 </style>
 </head>
@@ -148,6 +148,7 @@ ul.other li{padding:12px 4px;border-bottom:1px solid #EFF3F9;font-size:14px;colo
 <main class="main">
   <div class="topbar">
     <span class="tb-title">业务总览</span><span class="tb-sub">实时经营数据监控中心</span><span class="tb-sep"></span>
+    <span class="tb-sub" style="color:#7f8da1">数据截至 2026-09-05 14:55</span>
     <select class="select"><option>📅 近12个月</option><option>近6个月</option><option>近3个月</option></select>
     <span class="filter-pill on" data-brand="all">全部</span>
     <span class="filter-pill" data-brand="KONO">KONO</span>
@@ -157,41 +158,41 @@ ul.other li{padding:12px 4px;border-bottom:1px solid #EFF3F9;font-size:14px;colo
     <div class="tb-right"><span class="bell">🔔</span><button class="btn-up">⬆ 上传数据源</button><button class="btn-re" onclick="location.reload()">↻ 刷新</button></div>
   </div>
   <div class="kpis" id="overview"><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#F9731622;color:#F97316">年</div>
-  <div class="ring" style="background:conic-gradient(#F97316 100.00%,#E5E7EB 0)"><div class="ring-in">100.0%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#286fd822;color:#286fd8">年</div>
+  <div class="ring" style="background:conic-gradient(#286fd8 100.00%,#E5E7EB 0)"><div class="ring-in">100.0%</div></div></div>
   <div class="kpi-label">年度目标合计</div>
-  <div class="kpi-val" style="color:#F97316">1850<span class="unit">万</span></div>
-  <div class="kpi-foot"><span class="kpi-target">目标 ¥1700万</span><span class="kpi-chg" style="color:#22C55E">↑ 汇总</span></div>
+  <div class="kpi-val" style="color:#286fd8">1850<span class="unit">万</span></div>
+  <div class="kpi-foot"><span class="kpi-target">目标 ¥1850万</span><span class="kpi-chg" style="color:#16a978">↑ 汇总</span></div>
 </div><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#22C55E22;color:#22C55E">回</div>
-  <div class="ring" style="background:conic-gradient(#22C55E 0.54%,#E5E7EB 0)"><div class="ring-in">0.5%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#f2752922;color:#f27529">回</div>
+  <div class="ring" style="background:conic-gradient(#f27529 0.54%,#E5E7EB 0)"><div class="ring-in">0.5%</div></div></div>
   <div class="kpi-label">回款完成率</div>
-  <div class="kpi-val" style="color:#22C55E">0.54<span class="unit">%</span></div>
-  <div class="kpi-foot"><span class="kpi-target">¥10.0万回款</span><span class="kpi-chg" style="color:#22C55E">↑ 目标</span></div>
+  <div class="kpi-val" style="color:#f27529">0.54<span class="unit">%</span></div>
+  <div class="kpi-foot"><span class="kpi-target">¥10.0万回款</span><span class="kpi-chg" style="color:#16a978">↑ 目标</span></div>
 </div><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#5B5FEF22;color:#5B5FEF">出</div>
-  <div class="ring" style="background:conic-gradient(#5B5FEF 1.30%,#E5E7EB 0)"><div class="ring-in">1.3%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#286fd822;color:#286fd8">出</div>
+  <div class="ring" style="background:conic-gradient(#286fd8 1.30%,#E5E7EB 0)"><div class="ring-in">1.3%</div></div></div>
   <div class="kpi-label">出货订单金额</div>
-  <div class="kpi-val" style="color:#5B5FEF">24.07<span class="unit">万</span></div>
-  <div class="kpi-foot"><span class="kpi-target">19 条明细</span><span class="kpi-chg" style="color:#22C55E">↑ 累计</span></div>
+  <div class="kpi-val" style="color:#286fd8">24.07<span class="unit">万</span></div>
+  <div class="kpi-foot"><span class="kpi-target">19 条明细</span><span class="kpi-chg" style="color:#16a978">↑ 累计</span></div>
 </div><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#EC489922;color:#EC4899">预</div>
-  <div class="ring" style="background:conic-gradient(#EC4899 27.32%,#E5E7EB 0)"><div class="ring-in">27.3%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#286fd822;color:#286fd8">预</div>
+  <div class="ring" style="background:conic-gradient(#286fd8 27.32%,#E5E7EB 0)"><div class="ring-in">27.3%</div></div></div>
   <div class="kpi-label">预估利润额</div>
-  <div class="kpi-val" style="color:#EC4899">505<span class="unit">万</span></div>
-  <div class="kpi-foot"><span class="kpi-target">预估利润率加权</span><span class="kpi-chg" style="color:#22C55E">↑ 合计</span></div>
+  <div class="kpi-val" style="color:#286fd8">505<span class="unit">万</span></div>
+  <div class="kpi-foot"><span class="kpi-target">预估利润率加权</span><span class="kpi-chg" style="color:#16a978">↑ 合计</span></div>
 </div><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#14B8A622;color:#14B8A6">店</div>
-  <div class="ring" style="background:conic-gradient(#14B8A6 1.96%,#E5E7EB 0)"><div class="ring-in">2.0%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#286fd822;color:#286fd8">店</div>
+  <div class="ring" style="background:conic-gradient(#286fd8 1.96%,#E5E7EB 0)"><div class="ring-in">2.0%</div></div></div>
   <div class="kpi-label">店铺 GMV 合计</div>
-  <div class="kpi-val" style="color:#14B8A6">36.25<span class="unit">万</span></div>
-  <div class="kpi-foot"><span class="kpi-target">3 家店铺</span><span class="kpi-chg" style="color:#22C55E">↑ 累计</span></div>
+  <div class="kpi-val" style="color:#286fd8">36.25<span class="unit">万</span></div>
+  <div class="kpi-foot"><span class="kpi-target">3 家店铺</span><span class="kpi-chg" style="color:#16a978">↑ 累计</span></div>
 </div><div class="kpi card">
-  <div class="kpi-top"><div class="kpi-ico" style="background:#8B5CF622;color:#8B5CF6">合</div>
-  <div class="ring" style="background:conic-gradient(#8B5CF6 100.00%,#E5E7EB 0)"><div class="ring-in">100.0%</div></div></div>
+  <div class="kpi-top"><div class="kpi-ico" style="background:#286fd822;color:#286fd8">合</div>
+  <div class="ring" style="background:conic-gradient(#286fd8 100.00%,#E5E7EB 0)"><div class="ring-in">100.0%</div></div></div>
   <div class="kpi-label">合作服务商</div>
-  <div class="kpi-val" style="color:#8B5CF6">4<span class="unit">家</span></div>
-  <div class="kpi-foot"><span class="kpi-target">已签约合作</span><span class="kpi-chg" style="color:#22C55E">↑ 在册</span></div>
+  <div class="kpi-val" style="color:#286fd8">4<span class="unit">家</span></div>
+  <div class="kpi-foot"><span class="kpi-target">已签约合作</span><span class="kpi-chg" style="color:#16a978">↑ 在册</span></div>
 </div></div>
   <div class="card" style="margin-bottom:14px"><h3>销售额趋势</h3><div class="sub-t">三大品牌月度目标 vs 已完成回款</div><div id="trend" class="chart" style="height:340px"></div></div>
   <div class="grid23" id="top10" style="margin-bottom:14px">
@@ -229,40 +230,40 @@ ul.other li{padding:12px 4px;border-bottom:1px solid #EFF3F9;font-size:14px;colo
       <tbody><tr>
 <td>河南-澄清</td><td>河南澄清电子科技有限公司</td>
 <td class="num">¥500万</td>
-<td><span class="tag" style="background:#F59E0B">A级·重点</span></td>
+<td><span class="tag" style="background:#f27b28">A级·重点</span></td>
 <td>KONO</td><td>拼多多</td>
 <td class="num">¥140万</td></tr><tr>
 <td>郑州-景瑶</td><td></td>
 <td class="num">¥800万</td>
-<td><span class="tag" style="background:#FF7A45">S级·战略</span></td>
+<td><span class="tag" style="background:#4478cf">S级·战略</span></td>
 <td>WIS</td><td>抖音</td>
 <td class="num">¥200万</td></tr><tr>
 <td>上海-帝亚</td><td></td>
 <td class="num">¥400万</td>
-<td><span class="tag" style="background:#F59E0B">A级·重点</span></td>
+<td><span class="tag" style="background:#f27b28">A级·重点</span></td>
 <td>赫系</td><td>京东</td>
 <td class="num">¥128万</td></tr><tr>
 <td>深圳-帕克</td><td></td>
 <td class="num">¥150万</td>
-<td><span class="tag" style="background:#3B82F6">B级·成长</span></td>
+<td><span class="tag" style="background:#8b5cf6">B级·成长</span></td>
 <td>KONO</td><td>得物</td>
 <td class="num">¥37万</td></tr></tbody></table></div>
     <div class="card"><h3>各客户预估利润</h3><div class="sub-t">万元</div><div id="profitpie" class="chart" style="height:240px"></div></div>
   </div>
-  <div class="card" id="approve" style="margin-bottom:14px"><h3>内部审批</h3><div><div class="ap-row"><span class="ap-cat">发票申请</span><span class="tag" style="background:#F59E0B">待审核</span></div><div class="ap-row"><span class="ap-cat">供货政策申请</span><span class="tag" style="background:#F59E0B">待审核</span></div><div class="ap-row"><span class="ap-cat">渠道授权申请</span><span class="tag" style="background:#F59E0B">待审核</span></div></div></div>
+  <div class="card" id="approve" style="margin-bottom:14px"><h3>内部审批</h3><div><div class="ap-row"><span class="ap-cat">发票申请</span><span class="tag" style="background:#f27529">待审核</span></div><div class="ap-row"><span class="ap-cat">供货政策申请</span><span class="tag" style="background:#f27529">待审核</span></div><div class="ap-row"><span class="ap-cat">渠道授权申请</span><span class="tag" style="background:#f27529">待审核</span></div></div></div>
   <div class="card" id="other"><h3>其他事项</h3><ul class="other"><li>待跟进事项</li><li>物流状态</li><li>售后状态</li></ul></div>
 </main>
 <script>
-var DATA = {"months": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"], "trend_series": [{"name": "河南-澄清", "brand": "KONO", "data": [400000.0, 300000.0, 300000.0, 450000.0, 600000.0, 650000.0, 700000.0, 100000.0, 150000.0, 400000.0, 500000.0, 450000.0]}, {"name": "郑州-景瑶", "brand": "WIS", "data": [700000.0, 600000.0, 800000.0, 700000.0, 800000.0, 1000000.0, 800000.0, 300000.0, 500000.0, 600000.0, 700000.0, 500000.0]}, {"name": "上海-帝亚", "brand": "赫系", "data": [350000.0, 300000.0, 300000.0, 350000.0, 500000.0, 400000.0, 450000.0, 100000.0, 200000.0, 200000.0, 350000.0, 500000.0]}, {"name": "None", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"name": "None", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"name": "深圳-帕克", "brand": "KONO", "data": [150000.0, 150000.0, 150000.0, 150000.0, 200000.0, 150000.0, 150000.0, 0.0, 50000.0, 100000.0, 100000.0, 150000.0]}, {"name": "总目标", "brand": "", "data": [1600000.0, 1350000.0, 1550000.0, 1650000.0, 2100000.0, 2200000.0, 2100000.0, 500000.0, 900000.0, 1300000.0, 1650000.0, 1600000.0]}, {"name": "已完成", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100000.0, 0.0, 0.0, 0.0, 0.0]}], "total_monthly": [1600000.0, 1350000.0, 1550000.0, 1650000.0, 2100000.0, 2200000.0, 2100000.0, 500000.0, 900000.0, 1300000.0, 1650000.0, 1600000.0], "done_monthly": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100000.0, 0.0, 0.0, 0.0, 0.0], "total_goal_wan": 1850.0, "done_wan": 10.0, "rate_pct": 0.54, "cust_meta": [{"name": "河南-澄清", "company": "河南澄清电子科技有限公司", "brand": "KONO", "channel": "拼多多", "level": "A级·重点", "target": 5000000.0, "profit": 1400000.0}, {"name": "郑州-景瑶", "company": "", "brand": "WIS", "channel": "抖音", "level": "S级·战略", "target": 8000000.0, "profit": 2000000.0}, {"name": "上海-帝亚", "company": "", "brand": "赫系", "channel": "京东", "level": "A级·重点", "target": 4000000.0, "profit": 1280000.0}, {"name": "深圳-帕克", "company": "", "brand": "KONO", "channel": "得物", "level": "B级·成长", "target": 1500000.0, "profit": 375000.0}], "brand_pie": [{"name": "WIS", "value": 123640}, {"name": "KONO", "value": 100069}, {"name": "赫系", "value": 17035}], "cust_bar": [{"name": "郑州-景瑶", "value": 123640}, {"name": "河南-澄清", "value": 100069}, {"name": "上海-帝亚", "value": 17035}], "profit_pie": [{"name": "河南-澄清", "value": 140}, {"name": "郑州-景瑶", "value": 200}, {"name": "上海-帝亚", "value": 128}, {"name": "深圳-帕克", "value": 38}], "level_pie": [{"name": "S级·战略", "value": 1}, {"name": "A级·重点", "value": 2}, {"name": "B级·成长", "value": 1}], "brand_color": {"KONO": "#F59E0B", "WIS": "#3B82F6", "赫系": "#EC4899"}, "brand_of_cust": {"河南-澄清": "KONO", "郑州-景瑶": "WIS", "上海-帝亚": "赫系", "深圳-帕克": "KONO"}, "store_names": ["WIS抖音护肤旗舰店", "赫系京东洗护专卖店", "KONO美容洗护官方旗舰店"], "store_dates": ["2026-08-01T00:00:00.000+08:00", "2026-08-02T00:00:00.000+08:00", "2026-08-03T00:00:00.000+08:00", "2026-08-04T00:00:00.000+08:00", "2026-08-05T00:00:00.000+08:00", "2026-08-06T00:00:00.000+08:00", "2026-08-07T00:00:00.000+08:00", "2026-08-08T00:00:00.000+08:00", "2026-08-09T00:00:00.000+08:00", "2026-08-10T00:00:00.000+08:00", "2026-08-11T00:00:00.000+08:00", "2026-08-12T00:00:00.000+08:00", "2026-08-13T00:00:00.000+08:00", "2026-08-14T00:00:00.000+08:00", "2026-08-15T00:00:00.000+08:00", "2026-08-16T00:00:00.000+08:00", "2026-08-17T00:00:00.000+08:00", "2026-08-18T00:00:00.000+08:00", "2026-08-19T00:00:00.000+08:00", "2026-08-20T00:00:00.000+08:00", "2026-08-21T00:00:00.000+08:00", "2026-08-22T00:00:00.000+08:00", "2026-08-23T00:00:00.000+08:00", "2026-08-24T00:00:00.000+08:00", "2026-08-25T00:00:00.000+08:00", "2026-08-26T00:00:00.000+08:00", "2026-08-27T00:00:00.000+08:00", "2026-08-28T00:00:00.000+08:00", "2026-08-29T00:00:00.000+08:00", "2026-08-30T00:00:00.000+08:00", "2026-08-31T00:00:00.000+08:00"], "store_series": [{"name": "WIS抖音护肤旗舰店", "data": [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 4500, 4500, 4500, 4500, 4500, 4500, 5500, 5500, 5500, 5500, 5500, 7500, 7500, 7500, 7500, 7500, 7500, 9000, 9500, 1200, 1500]}, {"name": "赫系京东洗护专卖店", "data": [1500, 1500, 1500, 1500, 2500, 2500, 2500, 2500, 2500, 2500, 3000, 3000, 3000, 3000, 3000, 3000, 3200, 3200, 3200, 3200, 3200, 3200, 3200, 4000, 4000, 4000, 4000, 4000, 4200, 4200, 4000]}, {"name": "KONO美容洗护官方旗舰店", "data": [2000, 2000, 2000, 2000, 2000, 2000, 2000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 4500, 4500, 4500, 4500, 4500, 4500, 5500, 5500, 5500, 5500, 5500, 6000, 6500, 7000]}], "store_totals": {"WIS抖音护肤旗舰店": 150700, "赫系京东洗护专卖店": 93800, "KONO美容洗护官方旗舰店": 118000}, "gmv_total": 362500, "ship_total": 240744, "ship_rows": 19, "prod_rows": [{"brand": "WIS", "code": "WDP0541", "name": "【WIS隐形水润面膜(经典款)25g×10片】[ZS]", "qty": 1200.0, "amt": 52140.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 43.45}, {"brand": "WIS", "code": "WDP0232", "name": "【WIS玻尿酸极润面膜25g*10片】", "qty": 800.0, "amt": 39160.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 48.95}, {"brand": "WIS", "code": "WDP0185", "name": "【WIS隐形水润面膜25g×24片】", "qty": 600.0, "amt": 32340.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 53.9}, {"brand": "KONO", "code": "KNDP0665", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）500ml[线下防窜货]】", "qty": 910.0, "amt": 18727.8, "cust": "河南-澄清", "discount": 0.42, "price": 20.58}, {"brand": "KONO", "code": "KNDP0711", "name": "【KONO 卡厘控油蓬松洗发水2.0_500ml（线下条码）】", "qty": 900.0, "amt": 17640.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "KONO", "code": "KNDP0655", "name": "【KONO卡厘固发防脱洗发水500g】", "qty": 650.0, "amt": 16107.0, "cust": "河南-澄清", "discount": 0.42, "price": 24.78}, {"brand": "KONO", "code": "KNDP0521", "name": "【KONO 卡厘水润亮泽护发素500ml（线下条码）】", "qty": 500.0, "amt": 9800.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "赫系", "code": "HX10000", "name": "【赫系轻盈洗发水500ml】", "qty": 500.0, "amt": 7475.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.95}, {"brand": "KONO", "code": "KNDP0660", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）50g】", "qty": 1800.0, "amt": 6174.0, "cust": "河南-澄清", "discount": null, "price": 3.43}, {"brand": "KONO", "code": "KNDP0677", "name": "【KONO卡厘固发防脱洗发水500g[线下防窜货]】", "qty": 300.0, "amt": 5145.0, "cust": "河南-澄清", "discount": 0.35, "price": 17.15}, {"brand": "KONO", "code": "KNDP0694", "name": "【KONO卡厘多肽控油蓬松洗发水500ml[浅棕]】", "qty": 300.0, "amt": 5145.0, "cust": "河南-澄清", "discount": 0.35, "price": 17.15}, {"brand": "赫系", "code": "HX10001", "name": "【赫系赋活发膜300g】", "qty": 350.0, "amt": 5075.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.5}, {"brand": "KONO", "code": "KNDP0507", "name": "【KONO 卡厘净屑舒爽洗发水500ml（线下条码）】", "qty": 250.0, "amt": 4900.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "KONO", "code": "KNDP0610", "name": "【KONO卡厘控油蓬松洗发水50g】", "qty": 1350.0, "amt": 4630.5, "cust": "河南-澄清", "discount": 0.868354430379747, "price": 3.43}, {"brand": "赫系", "code": "HX10002", "name": "赫系水光护发素（新配方）", "qty": 300.0, "amt": 4485.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.95}, {"brand": "KONO", "code": "KNDP0716", "name": "【KONO卡厘控油蓬松洗发水2.0_8g×4】", "qty": 1400.0, "amt": 3080.0, "cust": "河南-澄清", "discount": 0.870253164556962, "price": 2.2}, {"brand": "KONO", "code": "KNDP0661", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）8g×4】", "qty": 1400.0, "amt": 3080.0, "cust": "河南-澄清", "discount": null, "price": 2.2}, {"brand": "KONO", "code": "KNDP0272", "name": "【（经典）KONO水润亮泽护发素60ml】", "qty": 500.0, "amt": 3000.0, "cust": "河南-澄清", "discount": null, "price": 6}, {"brand": "KONO", "code": "KNDP0679", "name": "【KONO卡厘固发防脱洗发水8g*4连包】", "qty": 1200.0, "amt": 2640.0, "cust": "河南-澄清", "discount": null, "price": 2.2}], "approve_list": [{"cat": "发票申请", "status": "待审核"}, {"cat": "供货政策申请", "status": "待审核"}, {"cat": "渠道授权申请", "status": "待审核"}], "other_list": ["待跟进事项", "物流状态", "售后状态"], "channel_data": {"全部": {"sales": [{"name": "抖音", "value": 123640}, {"name": "拼多多", "value": 100069}, {"name": "京东", "value": 17035}, {"name": "得物", "value": 0}], "profit": [{"name": "抖音", "value": 200}, {"name": "拼多多", "value": 140}, {"name": "京东", "value": 128}, {"name": "得物", "value": 38}]}, "KONO": {"sales": [{"name": "拼多多", "value": 100069}, {"name": "得物", "value": 0}], "profit": [{"name": "拼多多", "value": 140}, {"name": "得物", "value": 38}]}, "WIS": {"sales": [{"name": "抖音", "value": 123640}], "profit": [{"name": "抖音", "value": 200}]}, "赫系": {"sales": [{"name": "京东", "value": 17035}], "profit": [{"name": "京东", "value": 128}]}}, "brands": ["KONO", "WIS", "赫系"], "updated": "2026-09-05 14:35"};
-var PALETTE = ['#3B82F6','#F59E0B','#EC4899','#10B981','#8B5CF6','#14B8A6'];
-var AXIS = '#64748B'; var GRID = 'rgba(100,130,170,0.12)'; var LEGEND = '#64748B';
+var DATA = {"months": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"], "trend_series": [{"name": "河南-澄清", "brand": "KONO", "data": [400000.0, 300000.0, 300000.0, 450000.0, 600000.0, 650000.0, 700000.0, 100000.0, 150000.0, 400000.0, 500000.0, 450000.0]}, {"name": "郑州-景瑶", "brand": "WIS", "data": [700000.0, 600000.0, 800000.0, 700000.0, 800000.0, 1000000.0, 800000.0, 300000.0, 500000.0, 600000.0, 700000.0, 500000.0]}, {"name": "上海-帝亚", "brand": "赫系", "data": [350000.0, 300000.0, 300000.0, 350000.0, 500000.0, 400000.0, 450000.0, 100000.0, 200000.0, 200000.0, 350000.0, 500000.0]}, {"name": "None", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"name": "None", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"name": "深圳-帕克", "brand": "KONO", "data": [150000.0, 150000.0, 150000.0, 150000.0, 200000.0, 150000.0, 150000.0, 0.0, 50000.0, 100000.0, 100000.0, 150000.0]}, {"name": "总目标", "brand": "", "data": [1600000.0, 1350000.0, 1550000.0, 1650000.0, 2100000.0, 2200000.0, 2100000.0, 500000.0, 900000.0, 1300000.0, 1650000.0, 1600000.0]}, {"name": "已完成", "brand": "", "data": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100000.0, 0.0, 0.0, 0.0, 0.0]}], "total_monthly": [1600000.0, 1350000.0, 1550000.0, 1650000.0, 2100000.0, 2200000.0, 2100000.0, 500000.0, 900000.0, 1300000.0, 1650000.0, 1600000.0], "done_monthly": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100000.0, 0.0, 0.0, 0.0, 0.0], "total_goal_wan": 1850.0, "done_wan": 10.0, "rate_pct": 0.54, "cust_meta": [{"name": "河南-澄清", "company": "河南澄清电子科技有限公司", "brand": "KONO", "channel": "拼多多", "level": "A级·重点", "target": 5000000.0, "profit": 1400000.0}, {"name": "郑州-景瑶", "company": "", "brand": "WIS", "channel": "抖音", "level": "S级·战略", "target": 8000000.0, "profit": 2000000.0}, {"name": "上海-帝亚", "company": "", "brand": "赫系", "channel": "京东", "level": "A级·重点", "target": 4000000.0, "profit": 1280000.0}, {"name": "深圳-帕克", "company": "", "brand": "KONO", "channel": "得物", "level": "B级·成长", "target": 1500000.0, "profit": 375000.0}], "brand_pie": [{"name": "WIS", "value": 123640}, {"name": "KONO", "value": 100069}, {"name": "赫系", "value": 17035}], "cust_bar": [{"name": "郑州-景瑶", "value": 123640}, {"name": "河南-澄清", "value": 100069}, {"name": "上海-帝亚", "value": 17035}], "profit_pie": [{"name": "河南-澄清", "value": 140}, {"name": "郑州-景瑶", "value": 200}, {"name": "上海-帝亚", "value": 128}, {"name": "深圳-帕克", "value": 38}], "level_pie": [{"name": "S级·战略", "value": 1}, {"name": "A级·重点", "value": 2}, {"name": "B级·成长", "value": 1}], "brand_color": {"KONO": "#4478cf", "WIS": "#f27b28", "赫系": "#65b446"}, "brand_of_cust": {"河南-澄清": "KONO", "郑州-景瑶": "WIS", "上海-帝亚": "赫系", "深圳-帕克": "KONO"}, "store_names": ["WIS抖音护肤旗舰店", "赫系京东洗护专卖店", "KONO美容洗护官方旗舰店"], "store_dates": ["2026-08-01T00:00:00.000+08:00", "2026-08-02T00:00:00.000+08:00", "2026-08-03T00:00:00.000+08:00", "2026-08-04T00:00:00.000+08:00", "2026-08-05T00:00:00.000+08:00", "2026-08-06T00:00:00.000+08:00", "2026-08-07T00:00:00.000+08:00", "2026-08-08T00:00:00.000+08:00", "2026-08-09T00:00:00.000+08:00", "2026-08-10T00:00:00.000+08:00", "2026-08-11T00:00:00.000+08:00", "2026-08-12T00:00:00.000+08:00", "2026-08-13T00:00:00.000+08:00", "2026-08-14T00:00:00.000+08:00", "2026-08-15T00:00:00.000+08:00", "2026-08-16T00:00:00.000+08:00", "2026-08-17T00:00:00.000+08:00", "2026-08-18T00:00:00.000+08:00", "2026-08-19T00:00:00.000+08:00", "2026-08-20T00:00:00.000+08:00", "2026-08-21T00:00:00.000+08:00", "2026-08-22T00:00:00.000+08:00", "2026-08-23T00:00:00.000+08:00", "2026-08-24T00:00:00.000+08:00", "2026-08-25T00:00:00.000+08:00", "2026-08-26T00:00:00.000+08:00", "2026-08-27T00:00:00.000+08:00", "2026-08-28T00:00:00.000+08:00", "2026-08-29T00:00:00.000+08:00", "2026-08-30T00:00:00.000+08:00", "2026-08-31T00:00:00.000+08:00"], "store_series": [{"name": "WIS抖音护肤旗舰店", "data": [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 4500, 4500, 4500, 4500, 4500, 4500, 5500, 5500, 5500, 5500, 5500, 7500, 7500, 7500, 7500, 7500, 7500, 9000, 9500, 1200, 1500]}, {"name": "赫系京东洗护专卖店", "data": [1500, 1500, 1500, 1500, 2500, 2500, 2500, 2500, 2500, 2500, 3000, 3000, 3000, 3000, 3000, 3000, 3200, 3200, 3200, 3200, 3200, 3200, 3200, 4000, 4000, 4000, 4000, 4000, 4200, 4200, 4000]}, {"name": "KONO美容洗护官方旗舰店", "data": [2000, 2000, 2000, 2000, 2000, 2000, 2000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 4500, 4500, 4500, 4500, 4500, 4500, 5500, 5500, 5500, 5500, 5500, 6000, 6500, 7000]}], "store_totals": {"WIS抖音护肤旗舰店": 150700, "赫系京东洗护专卖店": 93800, "KONO美容洗护官方旗舰店": 118000}, "gmv_total": 362500, "ship_total": 240744, "ship_rows": 19, "prod_rows": [{"brand": "WIS", "code": "WDP0541", "name": "【WIS隐形水润面膜(经典款)25g×10片】[ZS]", "qty": 1200.0, "amt": 52140.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 43.45}, {"brand": "WIS", "code": "WDP0232", "name": "【WIS玻尿酸极润面膜25g*10片】", "qty": 800.0, "amt": 39160.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 48.95}, {"brand": "WIS", "code": "WDP0185", "name": "【WIS隐形水润面膜25g×24片】", "qty": 600.0, "amt": 32340.0, "cust": "郑州-景瑶", "discount": 0.55, "price": 53.9}, {"brand": "KONO", "code": "KNDP0665", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）500ml[线下防窜货]】", "qty": 910.0, "amt": 18727.8, "cust": "河南-澄清", "discount": 0.42, "price": 20.58}, {"brand": "KONO", "code": "KNDP0711", "name": "【KONO 卡厘控油蓬松洗发水2.0_500ml（线下条码）】", "qty": 900.0, "amt": 17640.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "KONO", "code": "KNDP0655", "name": "【KONO卡厘固发防脱洗发水500g】", "qty": 650.0, "amt": 16107.0, "cust": "河南-澄清", "discount": 0.42, "price": 24.78}, {"brand": "KONO", "code": "KNDP0521", "name": "【KONO 卡厘水润亮泽护发素500ml（线下条码）】", "qty": 500.0, "amt": 9800.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "赫系", "code": "HX10000", "name": "【赫系轻盈洗发水500ml】", "qty": 500.0, "amt": 7475.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.95}, {"brand": "KONO", "code": "KNDP0660", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）50g】", "qty": 1800.0, "amt": 6174.0, "cust": "河南-澄清", "discount": null, "price": 3.43}, {"brand": "KONO", "code": "KNDP0677", "name": "【KONO卡厘固发防脱洗发水500g[线下防窜货]】", "qty": 300.0, "amt": 5145.0, "cust": "河南-澄清", "discount": 0.35, "price": 17.15}, {"brand": "KONO", "code": "KNDP0694", "name": "【KONO卡厘多肽控油蓬松洗发水500ml[浅棕]】", "qty": 300.0, "amt": 5145.0, "cust": "河南-澄清", "discount": 0.35, "price": 17.15}, {"brand": "赫系", "code": "HX10001", "name": "【赫系赋活发膜300g】", "qty": 350.0, "amt": 5075.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.5}, {"brand": "KONO", "code": "KNDP0507", "name": "【KONO 卡厘净屑舒爽洗发水500ml（线下条码）】", "qty": 250.0, "amt": 4900.0, "cust": "河南-澄清", "discount": 0.4, "price": 19.6}, {"brand": "KONO", "code": "KNDP0610", "name": "【KONO卡厘控油蓬松洗发水50g】", "qty": 1350.0, "amt": 4630.5, "cust": "河南-澄清", "discount": 0.868354430379747, "price": 3.43}, {"brand": "赫系", "code": "HX10002", "name": "赫系水光护发素（新配方）", "qty": 300.0, "amt": 4485.0, "cust": "上海-帝亚", "discount": 0.5, "price": 14.95}, {"brand": "KONO", "code": "KNDP0716", "name": "【KONO卡厘控油蓬松洗发水2.0_8g×4】", "qty": 1400.0, "amt": 3080.0, "cust": "河南-澄清", "discount": 0.870253164556962, "price": 2.2}, {"brand": "KONO", "code": "KNDP0661", "name": "【KONO 卡厘控油蓬松洗发水（茶花香颂香氛限定）8g×4】", "qty": 1400.0, "amt": 3080.0, "cust": "河南-澄清", "discount": null, "price": 2.2}, {"brand": "KONO", "code": "KNDP0272", "name": "【（经典）KONO水润亮泽护发素60ml】", "qty": 500.0, "amt": 3000.0, "cust": "河南-澄清", "discount": null, "price": 6}, {"brand": "KONO", "code": "KNDP0679", "name": "【KONO卡厘固发防脱洗发水8g*4连包】", "qty": 1200.0, "amt": 2640.0, "cust": "河南-澄清", "discount": null, "price": 2.2}], "approve_list": [{"cat": "发票申请", "status": "待审核"}, {"cat": "供货政策申请", "status": "待审核"}, {"cat": "渠道授权申请", "status": "待审核"}], "other_list": ["待跟进事项", "物流状态", "售后状态"], "channel_data": {"全部": {"sales": [{"name": "抖音", "value": 123640}, {"name": "拼多多", "value": 100069}, {"name": "京东", "value": 17035}, {"name": "得物", "value": 0}], "profit": [{"name": "抖音", "value": 200}, {"name": "拼多多", "value": 140}, {"name": "京东", "value": 128}, {"name": "得物", "value": 38}]}, "KONO": {"sales": [{"name": "拼多多", "value": 100069}, {"name": "得物", "value": 0}], "profit": [{"name": "拼多多", "value": 140}, {"name": "得物", "value": 38}]}, "WIS": {"sales": [{"name": "抖音", "value": 123640}], "profit": [{"name": "抖音", "value": 200}]}, "赫系": {"sales": [{"name": "京东", "value": 17035}], "profit": [{"name": "京东", "value": 128}]}}, "brands": ["KONO", "WIS", "赫系"], "updated": "2026-09-05 14:55"};
+var PALETTE = ['#4478cf','#f27b28','#65b446','#8b5cf6','#e6505b','#16a978'];
+var AXIS = '#607187'; var GRID = 'rgba(40,111,216,0.10)'; var LEGEND = '#607187';
 function chart(id){var el=document.getElementById(id);return echarts.getInstanceByDom(el)||echarts.init(el)}
 function areaLine(id, series, cats){
   return chart(id).setOption({
-    tooltip:{trigger:'axis',backgroundColor:'#fff',borderColor:'#E2E8F0',textStyle:{color:'#1F2937'}},
+    tooltip:{trigger:'axis',backgroundColor:'#fff',borderColor:'#d9e5f5',textStyle:{color:'#101828'}},
     legend:{bottom:0,textStyle:{color:LEGEND}},
     grid:{left:72,right:20,top:24,bottom:46},
-    xAxis:{type:'category',data:cats,boundaryGap:false,axisLine:{lineStyle:{color:'#E2E8F0'}},axisLabel:{color:AXIS}},
+    xAxis:{type:'category',data:cats,boundaryGap:false,axisLine:{lineStyle:{color:'#d9e5f5'}},axisLabel:{color:AXIS}},
     yAxis:{type:'value',splitLine:{lineStyle:{color:GRID}},axisLabel:{color:AXIS}},
     series:series.map(function(s,i){
       var c = DATA.brand_color[s.brand] || PALETTE[i%PALETTE.length];
@@ -275,7 +276,7 @@ function areaLine(id, series, cats){
 function donut(id, data, colorFn, center){
   center = center || '38%';
   return chart(id).setOption({
-    tooltip:{trigger:'item',formatter:'{b}: {c} ({d}%)',backgroundColor:'#fff',borderColor:'#E2E8F0',textStyle:{color:'#1F2937'}},
+    tooltip:{trigger:'item',formatter:'{b}: {c} ({d}%)',backgroundColor:'#fff',borderColor:'#d9e5f5',textStyle:{color:'#101828'}},
     legend:{orient:'vertical',right:2,top:'center',textStyle:{color:LEGEND}},
     series:[{type:'pie',radius:['42%','68%'],center:[center,'50%'],data:data,
       label:{formatter:'{d}%',color:AXIS},
@@ -285,15 +286,15 @@ function donut(id, data, colorFn, center){
 function barH(id, data){
   data = data.slice().sort(function(a,b){return a.value-b.value});
   return chart(id).setOption({
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#fff',borderColor:'#E2E8F0',textStyle:{color:'#1F2937'}},
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#fff',borderColor:'#d9e5f5',textStyle:{color:'#101828'}},
     grid:{left:56,right:16,top:12,bottom:28},
     xAxis:{type:'value',splitLine:{lineStyle:{color:GRID}},axisLabel:{color:AXIS}},
-    yAxis:{type:'category',data:data.map(function(d){return d.name}),axisLine:{lineStyle:{color:'#E2E8F0'}},axisLabel:{color:AXIS,interval:0}},
+    yAxis:{type:'category',data:data.map(function(d){return d.name}),axisLine:{lineStyle:{color:'#d9e5f5'}},axisLabel:{color:AXIS,interval:0}},
     series:[{type:'bar',data:data.map(function(d){return d.value}),barMaxWidth:22,
       itemStyle:{color:function(p){return PALETTE[p.dataIndex%PALETTE.length]},borderRadius:[0,6,6,0]}}]
   });
 }
-function brandColor(name){ return DATA.brand_color[name] || '#64748B'; }
+function brandColor(name){ return DATA.brand_color[name] || '#7f8da1'; }
 areaLine('trend', DATA.trend_series, DATA.months);
 donut('brandpie', DATA.brand_pie, brandColor, '50%');
 donut('profitpie', DATA.profit_pie, null);
@@ -323,7 +324,7 @@ function renderTopTable(){
   });
   var html = '';
   rows.forEach(function(p){
-    var bc = DATA.brand_color[p.brand] || '#64748B';
+    var bc = DATA.brand_color[p.brand] || '#7f8da1';
     html += '<tr><td><span class="tag" style="background:'+bc+'">'+p.brand+'</span></td>' +
       '<td>'+(p.cust||'')+'</td>' +
       '<td>'+p.code+'</td>' +
