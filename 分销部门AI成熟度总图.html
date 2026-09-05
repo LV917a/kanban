@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分销部门主工作流 AI 成熟度总图</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#ffffff, #181818);
+    --fg: light-dark(#1a1c1f, #ffffff);
+    --muted: light-dark(rgba(26,28,31,.55), rgba(255,255,255,.55));
+    --card: light-dark(rgba(26,28,31,.04), rgba(255,255,255,.06));
+    --border: light-dark(rgba(26,28,31,.1), rgba(255,255,255,.12));
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    background: var(--bg); color: var(--fg);
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  .intro { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  .intro h1 { margin: 0; font-size: 24px; font-weight: 600; }
+  .intro p { margin: 6px 0 0; color: var(--muted); }
+  .mode-actions { display: flex; gap: 8px; }
+  .btn {
+    padding: 8px 16px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--card); color: var(--fg); cursor: pointer; font-size: 14px;
+  }
+  .btn.primary { background: var(--fg); color: var(--bg); border-color: transparent; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .metric { padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); }
+  .metric .label { color: var(--muted); font-size: 12px; }
+  .metric .value { font-size: 28px; font-weight: 600; margin-top: 4px; }
+  .metric .ctx { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .rule-strip {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 10px 0 14px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
+  }
+  .formula { font-weight: 600; }
+  .score-key { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; }
+  .badge.l0 { background: rgba(128,128,128,.15); }
+  .badge.l1 { background: rgba(243,136,59,.18); }
+  .badge.l2 { background: rgba(51,156,255,.18); }
+  .badge.l3 { background: rgba(235,119,177,.18); }
+  .badge.l4 { background: rgba(93,201,119,.18); }
+  .workflow { display: grid; grid-template-columns: minmax(200px,.34fr) 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .workflow:last-child { border-bottom: 0; }
+  .flow-head .topline { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .flow-name { font-weight: 600; margin: 6px 0 0; }
+  .flow-value, .flow-evidence { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+  .flow-math { font-weight: 600; margin: 6px 0 0; font-variant-numeric: tabular-nums; }
+  .nodes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; align-content: flex-start; margin: 0; padding: 0; list-style: none; }
+  .node { display: inline-flex; align-items: center; gap: 7px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); }
+  .node-index { display: inline-grid; place-items: center; min-width: 22px; min-height: 22px; border-radius: 999px; background: var(--border); color: var(--fg); font-size: 12px; font-weight: 600; }
+  .arrow { color: var(--muted); }
+  .note { color: var(--muted); font-size: 12px; margin-top: 14px; }
+  @media (max-width: 700px) {
+    .workflow { grid-template-columns: 1fr; }
+    .arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <div>
+      <h1>分销部门主工作流 AI 成熟度总图</h1>
+      <p>战略价值权重、端到端节点、现状定级与建议目标</p>
+    </div>
+    <div class="mode-actions">
+      <button class="btn primary" data-mode="current">现状评估</button>
+      <button class="btn" data-mode="target">建议目标</button>
+    </div>
+  </header>
+
+  <section class="metrics">
+    <div class="metric"><div class="label">当前总分</div><div class="value" id="cur-total">20.0</div><div class="ctx">满分 100</div></div>
+    <div class="metric"><div class="label">建议目标分</div><div class="value" id="tgt-total">56.5</div><div class="ctx">L2 底座 + 重点 L3</div></div>
+    <div class="metric"><div class="label">主工作流</div><div class="value">7</div><div class="ctx">符合 5–10 条规则</div></div>
+    <div class="metric"><div class="label">战略权重合计</div><div class="value">100%</div><div class="ctx">核心流程 ≥20%</div></div>
+  </section>
+
+  <section class="rule-strip">
+    <div class="formula">总分 = Σ（主工作流权重 × L 级分数）</div>
+    <div class="score-key">
+      <span class="badge l0">L0 · 0分</span>
+      <span class="badge l1">L1 · 20分</span>
+      <span class="badge l2">L2 · 40分</span>
+      <span class="badge l3">L3 · 70分</span>
+      <span class="badge l4">L4 · 100分</span>
+    </div>
+  </section>
+
+  <main class="workflow-list"></main>
+
+  <p class="note">权重按战略价值拟定，待分销负责人确认；现状按"整条流程是否由引擎主动推进"保守定级，孤立 AI 工具不单独计为 L3。</p>
+</div>
+
+<script>
+(() => {
+  const scores = { L0: 0, L1: 20, L2: 40, L3: 70, L4: 100 };
+  const flows = [
+    {
+      name: '选品报价', weight: 20,
+      value: '决定供货价格与利润空间，是分销的起点',
+      current: 'L1', target: 'L2',
+      currentNote: '报价清单已上云，折扣/政策靠人工制定与核对',
+      targetNote: '引擎驱动报价流程，AI 生成报价清单+售价监测，折扣/政策决策保留人工',
+      nodes: ['业务规划协同','成本表获取','供货折扣制定','报价清单生成','客户选品确认','活动政策制定','售价监测控价']
+    },
+    {
+      name: '合作条款', weight: 20,
+      value: '决定合作关系、法律保障与保证金风控',
+      current: 'L1', target: 'L2',
+      currentNote: '合同模板已上云，法务审核+盖章+邮寄靠人工',
+      targetNote: '引擎驱动合同流转+到期催办，AI 起草初稿+识别保证金凭证，法务终审+物理盖章保留人工',
+      nodes: ['条款初稿拟定','法务审核','OA盖章申请','纸质盖章邮寄','保证金缴纳登记','协议归档留存','保证金退还']
+    },
+    {
+      name: '合作材料', weight: 10,
+      value: '开店授权的必要执行环节，纯标准化',
+      current: 'L1', target: 'L3',
+      currentNote: '材料已归档，资质核验靠人工逐项',
+      targetNote: 'AI 自动核验证照+生成授权函+自动归档+到期预警，合规终审保留人工',
+      nodes: ['资料收集','资质完整性预审','OA申请审核','资质核验','授权函生成','材料归档','到期预警']
+    },
+    {
+      name: '店铺管理', weight: 15,
+      value: '决定客户动销与持续出货',
+      current: 'L1', target: 'L3',
+      currentNote: '子账号/稽查已有，靠人执行',
+      targetNote: 'AI 全网价格稽查+违规识别+素材话术生成，机制审核+权限配置保留人工',
+      nodes: ['子账号开通','机制审核','权限配置','价格稽查','素材提供','话术库','产品培训']
+    },
+    {
+      name: '采购出货', weight: 20,
+      value: '核心交付，把货发出去',
+      current: 'L1', target: 'L3',
+      currentNote: '系统录入已有，货款审核/物流跟进靠人',
+      targetNote: 'AI 自动录入订单+库存效期查询+物流跟踪预警，物理出库发运保留人工',
+      nodes: ['客户下单','系统录入','客户资料搭建','库存效期查询','货款到账审核','出库发运','物流跟踪']
+    },
+    {
+      name: '财务对账', weight: 10,
+      value: '资金与利润准确落袋',
+      current: 'L1', target: 'L3',
+      currentNote: '已有部分线上，回款/对账/核销主要靠人工',
+      targetNote: 'AI 自动回款匹配+出货对账+利润测算+物流费核对+开票申请，财务确认保留人工',
+      nodes: ['回款到账','出货对账','利润测算','物流费核对','推广核销','开票收据','对账归档']
+    },
+    {
+      name: '售后服务', weight: 5,
+      value: '客户口碑与关系保障',
+      current: 'L1', target: 'L2',
+      currentNote: '退换货 OA 已有，舆情靠人工监测',
+      targetNote: '引擎驱动工单流转，AI 接单分流+舆情监测，退换货实物+公关处置保留人工',
+      nodes: ['售后反馈','智能接单分流','OA退换审批','错漏补发','差评舆情监测','重大舆情处置','售后归档']
+    }
+  ];
+
+  const list = document.querySelector('.workflow-list');
+  const buttons = Array.from(document.querySelectorAll('[data-mode]'));
+  const weighted = (flow, mode) => flow.weight * scores[flow[mode]] / 100;
+
+  const render = (mode) => {
+    let total = 0;
+    list.innerHTML = flows.map((flow) => {
+      const level = flow[mode];
+      const note = flow[mode + 'Note'];
+      const w = weighted(flow, mode);
+      total += w;
+      const nodes = flow.nodes.map((n, ni) => {
+        const arrow = ni < flow.nodes.length - 1 ? '<span class="arrow">→</span>' : '';
+        return '<li class="node"><span class="node-index">' + (ni + 1) + '</span><span>' + n + '</span></li>' + arrow;
+      }).join('');
+      const levelCls = level.toLowerCase();
+      return '<section class="workflow">'
+        + '<div class="flow-head">'
+        + '<div class="topline"><span class="badge">权重 ' + flow.weight + '%</span><span class="badge ' + levelCls + '">' + level + '</span></div>'
+        + '<p class="flow-name">' + flow.name + '</p>'
+        + '<p class="flow-value">' + flow.value + '</p>'
+        + '<p class="flow-evidence">' + note + '</p>'
+        + '<p class="flow-math">' + flow.weight + '% × ' + scores[level] + ' = ' + w.toFixed(1) + ' 分</p>'
+        + '</div>'
+        + '<ol class="nodes">' + nodes + '</ol>'
+        + '</section>';
+    }).join('');
+    document.getElementById(mode === 'current' ? 'cur-total' : 'tgt-total').textContent = total.toFixed(1);
+  };
+
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(c => c.classList.toggle('primary', c === b));
+    render(b.dataset.mode);
+  }));
+
+  render('current');
+})();
+</script>
+</body>
+</html>
