@@ -5,128 +5,235 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>分销工作门户 · 总入口</title>
 <style>
+  :root{
+    color-scheme: light;
+    --color-brand-900:#102b54;
+    --color-brand-800:#174575;
+    --color-primary-600:#286fd8;
+    --color-primary-500:#3d79d0;
+    --color-primary-100:#eaf3ff;
+    --color-primary-050:#f5f9ff;
+    --color-text-strong:#101828;
+    --color-text:#2f4058;
+    --color-text-secondary:#607187;
+    --color-text-muted:#7f8da1;
+    --color-page:#edf4fd;
+    --color-surface:#ffffff;
+    --color-surface-subtle:#f8fbff;
+    --color-border:#d9e5f5;
+    --color-border-strong:#bad0eb;
+    --color-success:#16a978;
+    --color-warning:#f27529;
+    --color-danger:#df4b51;
+    --color-focus:#ffb64e;
+    --radius-sm:6px; --radius-md:9px; --radius-lg:13px; --radius-xl:20px; --radius-pill:999px;
+    --shadow-card:0 7px 24px rgb(40 111 216 / 7%);
+    --shadow-header:0 18px 40px rgb(30 91 163 / 18%);
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+    --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+    --font-sans:"Microsoft YaHei UI","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;
+    --duration-fast:160ms; --duration-normal:240ms;
+    --ease-standard:cubic-bezier(.4,0,.2,1);
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-    background:#f5f7fb;color:#17243a;font-size:14px;line-height:1.55;min-height:100vh}
-  .wrap{max-width:1180px;margin:0 auto;padding:40px 24px 60px}
-  header{display:flex;align-items:center;gap:16px;margin-bottom:8px}
-  .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#4b3fe3,#7c3aed);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;
-    box-shadow:0 10px 26px rgba(75,63,227,.32);flex-shrink:0}
-  .h-title{font-size:26px;font-weight:800;letter-spacing:.5px}
-  .h-sub{font-size:13px;color:#64748b;margin-top:3px}
-  .lead{margin:22px 0 30px;font-size:14px;color:#475569}
-  .lead b{color:#4b3fe3}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-sans);font-synthesis:none;
+    background:var(--color-page);color:var(--color-text);
+    font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+
+  /* 页头：海军蓝渐层，高度由内容决定 */
+  .page-head{
+    background:linear-gradient(135deg,var(--color-brand-900),var(--color-brand-800) 55%,var(--color-primary-600));
+    color:var(--color-text-on-dark,#fff);box-shadow:var(--shadow-header);
+  }
+  .head-inner{max-width:1680px;margin:0 auto;padding:32px 48px 30px;display:flex;align-items:center;gap:18px}
+  .logo{
+    width:54px;height:54px;border-radius:var(--radius-lg);flex-shrink:0;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:800;font-size:23px;letter-spacing:1px;
+  }
+  .h-title{font-size:26px;font-weight:800;line-height:1.25;letter-spacing:.5px}
+  .h-sub{font-size:12.5px;color:rgba(255,255,255,.78);margin-top:4px}
+  .head-meta{margin-left:auto;text-align:right;font-size:12px;color:rgba(255,255,255,.8)}
+  .head-meta b{display:block;font-size:13px;color:#fff;font-weight:600}
+
+  .wrap{max-width:1680px;margin:0 auto;padding:32px 48px 64px}
+
+  .lead{margin:0 0 28px;font-size:13.5px;color:var(--color-text-secondary)}
+  .lead b{color:var(--color-primary-600);font-weight:700}
+
   .group{margin-bottom:34px}
   .group-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-  .group-icon{font-size:18px}
-  .group-head h2{font-size:16px;font-weight:700;color:#1e293b}
-  .group-line{flex:1;height:1px;background:linear-gradient(90deg,#dbe4f0,transparent)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
-  .card{position:relative;display:block;background:#fff;border:1px solid #e2e8f0;border-radius:14px;
-    padding:20px 20px 18px;text-decoration:none;color:inherit;transition:.18s;
-    box-shadow:0 1px 3px rgba(23,36,58,.05);overflow:hidden}
-  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,#4b3fe3)}
-  .card:hover{transform:translateY(-3px);border-color:var(--c,#4b3fe3);box-shadow:0 12px 28px rgba(23,36,58,.12)}
+  .group-icon{font-size:17px;line-height:1}
+  .group-head h2{font-size:16px;font-weight:700;color:var(--color-text-strong);letter-spacing:.2px}
+  .group-count{
+    font-size:11px;font-weight:700;color:var(--color-text-muted);
+    background:var(--color-surface);border:1px solid var(--color-border);
+    border-radius:var(--radius-pill);padding:1px 9px;
+  }
+  .group-line{flex:1;height:1px;background:linear-gradient(90deg,var(--color-border),transparent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--color-surface);border:1px solid var(--color-border);
+    border-radius:var(--radius-lg);padding:20px 20px 18px;
+    text-decoration:none;color:inherit;
+    transition:transform var(--duration-fast) var(--ease-standard),
+               border-color var(--duration-fast) var(--ease-standard),
+               box-shadow var(--duration-fast) var(--ease-standard);
+    box-shadow:var(--shadow-card);overflow:hidden;
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--color-primary-600))}
+  .card:hover{transform:translateY(-2px);border-color:var(--color-border-strong);box-shadow:0 14px 32px rgb(40 111 216 / 14%)}
+  .card:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
   .card-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .card-title{font-size:16px;font-weight:700;color:#17243a}
-  .star{font-size:10px;font-weight:700;color:#fff;background:var(--c,#4b3fe3);border-radius:999px;padding:2px 8px}
-  .card-desc{font-size:12.8px;color:#64748b;line-height:1.65;margin-bottom:12px;min-height:42px}
-  .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-  .tag{font-size:11px;font-weight:600;color:var(--c,#4b3fe3);
-    background:rgba(120,120,200,.12);border-radius:999px;padding:2.5px 9px}
-  .card-go{font-size:12.5px;font-weight:700;color:var(--c,#4b3fe3);opacity:0;transform:translateX(-4px);transition:.18s}
-  .card:hover .card-go{opacity:1;transform:translateX(0)}
-  footer{margin-top:40px;padding-top:20px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-  @media(max-width:640px){
-    .wrap{padding:24px 16px 40px}
+  .card-title{font-size:17px;font-weight:700;color:var(--color-text-strong);line-height:1.4}
+  .star{
+    font-size:10.5px;font-weight:700;color:#fff;background:var(--accent,var(--color-primary-600));
+    border-radius:var(--radius-pill);padding:2px 9px;flex-shrink:0;
+  }
+  .card-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:14px;flex:1}
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tag{
+    font-size:11px;font-weight:600;color:var(--color-text-secondary);
+    background:var(--color-surface-subtle);border:1px solid var(--color-border);
+    border-radius:var(--radius-pill);padding:2.5px 9px;white-space:nowrap;
+  }
+  .card-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--color-border);padding-top:12px}
+  .card-url{font-size:11px;color:var(--color-text-muted);font-family:Consolas,"Roboto Mono",monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
+  .card-go{
+    font-size:12.5px;font-weight:700;color:var(--accent,var(--color-primary-600));
+    display:inline-flex;align-items:center;gap:4px;
+    transition:gap var(--duration-fast) var(--ease-standard);
+  }
+  .card:hover .card-go{gap:8px}
+
+  footer{
+    margin-top:44px;padding-top:20px;border-top:1px solid var(--color-border);
+    font-size:12px;color:var(--color-text-muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+
+  @media(max-width:1439px){ .head-inner{padding:28px 32px} .wrap{padding:28px 32px 56px} }
+  @media(max-width:1023px){
+    .head-inner{padding:24px 24px;flex-wrap:wrap}
+    .head-meta{margin-left:0;text-align:left;width:100%}
+    .wrap{padding:24px 24px 48px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  }
+  @media(max-width:767px){
+    .head-inner{padding:20px 16px}
+    .wrap{padding:20px 16px 40px}
     .grid{grid-template-columns:1fr}
     .h-title{font-size:21px}
+    .logo{width:46px;height:46px;font-size:20px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">分</div>
+<header class="page-head">
+  <div class="head-inner">
+    <div class="logo" aria-hidden="true">分</div>
     <div>
-      <div class="h-title">分销工作门户</div>
+      <h1 class="h-title">分销工作门户</h1>
       <div class="h-sub">电商发展部 · 线上分销</div>
     </div>
-  </header>
-  <div class="lead">共收录 <b>6</b> 个页面，按类别快速进入。点击卡片在新标签页打开。</div>
+    <div class="head-meta"><b>数据截至 2026-09-16</b>共 6 个页面</div>
+  </div>
+</header>
+<main class="wrap">
+  <p class="lead">按类别快速进入，共收录 <b>6</b> 个页面。点击卡片在新标签页打开。</p>
 
   <section class="group">
-    <div class="group-head"><span class="group-icon">🖥️</span><h2>工作台 · 操作台</h2><span class="group-line"></span></div>
+    <div class="group-head">
+      <span class="group-icon" aria-hidden="true">🖥️</span>
+      <h2>工作台 · 操作台</h2><span class="group-count">2</span>
+      <span class="group-line"></span>
+    </div>
     <div class="grid">
-    <a class="card" href="fenxiao-console.html" style="--c:#4b3fe3" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">分销操作台</div>
-        <span class="star">常用</span>
-      </div>
+    <a class="card" href="https://lv917a.github.io/kanban/fenxiao-console.html" style="--accent:var(--color-primary-600)" target="_blank" rel="noopener" aria-label="分销操作台">
+      <div class="card-top"><div class="card-title">分销操作台</div><span class="star">常用</span></div>
       <div class="card-desc">团队日常操作台：数据总览（业绩目标曲线 / 出货饼图）+ 三大业务板块 11 个子项可操作面板</div>
       <div class="card-tags"><span class="tag">行动中心</span><span class="tag">数据总览</span><span class="tag">合同审核</span><span class="tag">履约执行</span><span class="tag">财务对账</span></div>
-      <div class="card-go">打开 →</div>
-    </a>
-    <a class="card" href="fenxiao-hub.html" style="--c:#7c3aed" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">分销工作台中枢</div>
-        
+      <div class="card-foot">
+        <span class="card-url">fenxiao-console.html</span>
+        <span class="card-go">打开 →</span>
       </div>
+    </a>
+    <a class="card" href="https://lv917a.github.io/kanban/fenxiao-hub.html" style="--accent:var(--color-primary-600)" target="_blank" rel="noopener" aria-label="分销工作台中枢">
+      <div class="card-top"><div class="card-title">分销工作台中枢</div></div>
       <div class="card-desc">分销工作流中枢面板：三板块节点与流转关系总览</div>
       <div class="card-tags"><span class="tag">中枢面板</span><span class="tag">节点流转</span></div>
-      <div class="card-go">打开 →</div>
+      <div class="card-foot">
+        <span class="card-url">fenxiao-hub.html</span>
+        <span class="card-go">打开 →</span>
+      </div>
     </a></div>
   </section>
   <section class="group">
-    <div class="group-head"><span class="group-icon">📊</span><h2>数据看板</h2><span class="group-line"></span></div>
+    <div class="group-head">
+      <span class="group-icon" aria-hidden="true">📊</span>
+      <h2>数据看板</h2><span class="group-count">1</span>
+      <span class="group-line"></span>
+    </div>
     <div class="grid">
-    <a class="card" href="bi-dashboard.html" style="--c:#2563eb" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">分销业务 BI 大屏</div>
-        <span class="star">常用</span>
-      </div>
+    <a class="card" href="https://lv917a.github.io/kanban/bi-dashboard.html" style="--accent:var(--color-primary-600)" target="_blank" rel="noopener" aria-label="分销业务 BI 大屏">
+      <div class="card-top"><div class="card-title">分销业务 BI 大屏</div><span class="star">常用</span></div>
       <div class="card-desc">多维数据大屏：业绩目标趋势、品牌/客户占比、店铺销售、出货与审批全景</div>
       <div class="card-tags"><span class="tag">BI 大屏</span><span class="tag">业绩目标</span><span class="tag">出货分析</span><span class="tag">店铺销售</span></div>
-      <div class="card-go">打开 →</div>
+      <div class="card-foot">
+        <span class="card-url">bi-dashboard.html</span>
+        <span class="card-go">打开 →</span>
+      </div>
     </a></div>
   </section>
   <section class="group">
-    <div class="group-head"><span class="group-icon">🧭</span><h2>流程 · 体系</h2><span class="group-line"></span></div>
+    <div class="group-head">
+      <span class="group-icon" aria-hidden="true">🧭</span>
+      <h2>流程 · 体系</h2><span class="group-count">3</span>
+      <span class="group-line"></span>
+    </div>
     <div class="grid">
-    <a class="card" href="fenxiao-3chains.html" style="--c:#0ea5a0" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">线上分销经营 · 三链拆解版图</div>
-        
-      </div>
+    <a class="card" href="https://lv917a.github.io/kanban/fenxiao-3chains.html" style="--accent:#0e7f9e" target="_blank" rel="noopener" aria-label="线上分销经营 · 三链拆解版图">
+      <div class="card-top"><div class="card-title">线上分销经营 · 三链拆解版图</div></div>
       <div class="card-desc">3 条业务链路 / 7 个工作流节点 / 28 个执行节点的成熟度拆解</div>
       <div class="card-tags"><span class="tag">三链拆解</span><span class="tag">成熟度 L0–L4</span></div>
-      <div class="card-go">打开 →</div>
-    </a>
-    <a class="card" href="w3-fenxiao-workflow.html" style="--c:#0891b2" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">线上分销经营 · 工作流程全景图</div>
-        
+      <div class="card-foot">
+        <span class="card-url">fenxiao-3chains.html</span>
+        <span class="card-go">打开 →</span>
       </div>
+    </a>
+    <a class="card" href="https://lv917a.github.io/kanban/w3-fenxiao-workflow.html" style="--accent:#0e7f9e" target="_blank" rel="noopener" aria-label="线上分销经营 · 工作流程全景图">
+      <div class="card-top"><div class="card-title">线上分销经营 · 工作流程全景图</div></div>
       <div class="card-desc">分销业务端到端工作流程全景，节点与交接关系一览</div>
       <div class="card-tags"><span class="tag">流程全景</span><span class="tag">节点交接</span></div>
-      <div class="card-go">打开 →</div>
-    </a>
-    <a class="card" href="分销部门AI成熟度总图.html" style="--c:#d97706" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-title">分销部门主工作流 AI 成熟度总图</div>
-        
+      <div class="card-foot">
+        <span class="card-url">w3-fenxiao-workflow.html</span>
+        <span class="card-go">打开 →</span>
       </div>
+    </a>
+    <a class="card" href="https://lv917a.github.io/kanban/分销部门AI成熟度总图.html" style="--accent:var(--color-warning)" target="_blank" rel="noopener" aria-label="分销部门主工作流 AI 成熟度总图">
+      <div class="card-top"><div class="card-title">分销部门主工作流 AI 成熟度总图</div></div>
       <div class="card-desc">部门主工作流的 AI 成熟度分级总图</div>
       <div class="card-tags"><span class="tag">AI 成熟度</span><span class="tag">工作流</span></div>
-      <div class="card-go">打开 →</div>
+      <div class="card-foot">
+        <span class="card-url">分销部门AI成熟度总图.html</span>
+        <span class="card-go">打开 →</span>
+      </div>
     </a></div>
   </section>
   <footer>
     <span>分销工作门户 · 总入口</span>
-    <span>GitHub Pages 托管</span>
+    <span>GitHub Pages 托管 · lv917a.github.io/kanban</span>
   </footer>
-</div>
+</main>
 </body>
 </html>
