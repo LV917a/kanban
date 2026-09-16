@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分销操作台 · 团队工作台</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f8fafc;color:#1e293b;font-size:14px;line-height:1.5;
+    display:flex;min-height:100vh;
+  }
+
+  /* ===== 左侧导航 ===== */
+  .sidebar{
+    width:256px;flex-shrink:0;background:#0f172a;color:#cbd5e1;
+    display:flex;flex-direction:column;overflow-y:auto;
+  }
+  .sidebar-brand{
+    padding:18px 20px;border-bottom:1px solid #1e293b;display:flex;align-items:center;gap:11px;
+  }
+  .brand-logo{
+    width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4b3fe3,#7c3aed);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;
+    box-shadow:0 4px 12px rgba(75,63,227,.4);flex-shrink:0;
+  }
+  .brand-text b{display:block;font-size:14px;color:#f1f5f9;font-weight:700}
+  .brand-text span{font-size:11px;color:#64748b}
+
+  .nav-home{
+    display:flex;align-items:center;gap:10px;padding:12px 20px;cursor:pointer;
+    font-size:13.5px;color:#e2e8f0;border-left:3px solid transparent;transition:.15s;
+  }
+  .nav-home:hover{background:#1e293b}
+  .nav-home.active{background:#1e293b;border-left-color:#4b3fe3;color:#fff;font-weight:600}
+
+  .nav-group{padding:6px 0 2px}
+  .nav-group-title{
+    display:flex;align-items:center;gap:7px;padding:10px 20px 6px;
+    font-size:12.5px;font-weight:700;color:#e2e8f0;letter-spacing:.3px;
+  }
+  .nav-group-icon{font-size:13px}
+  .nav-group-count{
+    margin-left:auto;font-size:10px;font-weight:700;color:#94a3b8;
+    background:#1e293b;border-radius:999px;padding:1px 7px;
+  }
+  .nav-item{
+    display:flex;align-items:center;gap:9px;padding:8px 20px 8px 34px;
+    cursor:pointer;font-size:13px;color:#94a3b8;transition:.15s;
+    border-left:3px solid transparent;
+  }
+  .nav-item:hover{background:#1e293b;color:#e2e8f0}
+  .nav-item.active{background:#1e293b;color:#fff;font-weight:600;border-left-color:var(--sec,#4b3fe3)}
+  .nav-item-dot{width:5px;height:5px;border-radius:50%;background:#475569;flex-shrink:0}
+  .nav-item.active .nav-item-dot{background:var(--sec,#4b3fe3)}
+
+  /* ===== 右侧主区 ===== */
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .topbar{
+    height:62px;background:#fff;border-bottom:1px solid #e2e8f0;flex-shrink:0;
+    display:flex;align-items:center;justify-content:space-between;padding:0 24px;
+  }
+  .topbar-title{font-size:17px;font-weight:700}
+  .topbar-sub{font-size:12px;color:#64748b;margin-top:2px}
+  .topbar-user{display:flex;align-items:center;gap:8px;font-size:13px;color:#475569}
+  .avatar{
+    width:32px;height:32px;border-radius:50%;background:#4b3fe3;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+  }
+  .content{flex:1;overflow-y:auto;padding:24px}
+
+  /* KPI */
+  .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:22px}
+  .kpi-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .kpi-label{font-size:12px;color:#64748b;margin-bottom:8px}
+  .kpi-value{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+  .kpi-note{font-size:11px;color:#94a3b8;margin-top:6px}
+
+  .two-col{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+
+  /* 面板 */
+  .panel{background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
+  .panel-header{padding:15px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .panel-title{font-size:15px;font-weight:700}
+  .panel-sub{font-size:12px;color:#64748b;margin-top:2px}
+  .panel-tag{font-size:11px;padding:3px 10px;border-radius:999px;background:#f1f5f9;color:#64748b;flex-shrink:0}
+  .panel-body{padding:8px 20px 16px}
+
+  /* 流列表 */
+  .feed-item{padding:13px 0;border-bottom:1px solid #f1f5f9}
+  .feed-item:last-child{border-bottom:none}
+  .feed-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .feed-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .feed-title{font-size:13.5px;font-weight:600;flex:1}
+  .feed-desc{font-size:12.5px;color:#475569;margin-bottom:3px}
+  .feed-time{font-size:11px;color:#94a3b8}
+  .feed-deadline{font-size:11px;color:#dc2626;font-weight:600}
+  .todo-check{display:flex;align-items:center;cursor:pointer}
+  .todo-check input{display:none}
+  .todo-check span{width:17px;height:17px;border:2px solid #cbd5e1;border-radius:4px;display:inline-block;position:relative;transition:.15s}
+  .todo-check input:checked + span{background:#16a34a;border-color:#16a34a}
+  .todo-check input:checked + span::after{content:"";position:absolute;left:4px;top:1px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+  /* 状态药丸 */
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2.5px 9px;border-radius:999px;white-space:nowrap}
+  .pill i{width:5px;height:5px;border-radius:50%;display:inline-block}
+
+  /* 工具栏 */
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 13px;
+    border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s;
+    border:1px solid #e2e8f0;background:#fff;color:#334155;
+  }
+  .btn:hover{background:#f8fafc;border-color:#cbd5e1}
+  .btn-primary{background:var(--sec,#4b3fe3);border-color:transparent;color:#fff}
+  .btn-primary:hover{filter:brightness(1.08);background:var(--sec,#4b3fe3)}
+
+  /* 数据表 */
+  .data-table{width:100%;border-collapse:collapse;font-size:13px}
+  .data-table th{
+    text-align:left;padding:11px 12px;font-size:11.5px;font-weight:600;color:#64748b;
+    background:#f8fafc;border-bottom:1px solid #e2e8f0;white-space:nowrap;
+  }
+  .data-table td{padding:12px;border-bottom:1px solid #f1f5f9;color:#334155;white-space:nowrap}
+  .data-table tbody tr:hover{background:#fafbfc}
+  .cell-strong{font-weight:600;color:#1e293b}
+  .cell-actions{text-align:right}
+  .row-btn{
+    font-size:12px;color:#4b3fe3;background:none;border:none;cursor:pointer;
+    padding:2px 6px;border-radius:5px;font-weight:600;
+  }
+  .row-btn:hover{background:#ede9fe}
+  .panel-foot{padding:12px 20px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#94a3b8}
+
+  @media(max-width:1200px){
+    .kpi-row{grid-template-columns:repeat(3,1fr)}
+    .two-col{grid-template-columns:1fr}
+  }
+  @media(max-width:768px){
+    body{flex-direction:column}
+    .sidebar{width:100%;height:auto}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<!-- 左侧导航 -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">分</div>
+    <div class="brand-text"><b>分销操作台</b><span>电商发展部 · 线上分销</span></div>
+  </div>
+  <div class="nav-home active" id="nav-home" onclick="showHome()">
+    <span>⚡</span><span>行动中心</span>
+  </div>
+  <div class="nav-group-title" style="padding-left:20px;color:#64748b;font-size:11px;letter-spacing:.6px">分销业务板块</div>
+  <div class="nav-group">
+  <div class="nav-group-title" style="--sec:#4b3fe3">
+    <span class="nav-group-icon">📑</span>合同审核类
+    <span class="nav-group-count">3</span>
+  </div>
+  <div class="nav-item active" data-key="cust-type" style="--sec:#4b3fe3" onclick="showItem('cust-type')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">合作客户类型</span>
+  </div>
+  <div class="nav-item" data-key="contract-flow" style="--sec:#4b3fe3" onclick="showItem('contract-flow')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">合同审批流</span>
+  </div>
+  <div class="nav-item" data-key="contract-mgmt" style="--sec:#4b3fe3" onclick="showItem('contract-mgmt')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">合同管理</span>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title" style="--sec:#0ea5a0">
+    <span class="nav-group-icon">⚙️</span>履约执行类
+    <span class="nav-group-count">4</span>
+  </div>
+  <div class="nav-item" data-key="discount" style="--sec:#0ea5a0" onclick="showItem('discount')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">客户选品折扣</span>
+  </div>
+  <div class="nav-item" data-key="margin" style="--sec:#0ea5a0" onclick="showItem('margin')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">公司毛利测算</span>
+  </div>
+  <div class="nav-item" data-key="purchase" style="--sec:#0ea5a0" onclick="showItem('purchase')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">采购订单管理</span>
+  </div>
+  <div class="nav-item" data-key="ship-track" style="--sec:#0ea5a0" onclick="showItem('ship-track')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">出货跟踪</span>
+  </div>
+</div>
+<div class="nav-group">
+  <div class="nav-group-title" style="--sec:#d97706">
+    <span class="nav-group-icon">💰</span>财务对账类
+    <span class="nav-group-count">4</span>
+  </div>
+  <div class="nav-item" data-key="receipt" style="--sec:#d97706" onclick="showItem('receipt')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">客户回款清单</span>
+  </div>
+  <div class="nav-item" data-key="ship-invoice" style="--sec:#d97706" onclick="showItem('ship-invoice')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">客户出货单</span>
+  </div>
+  <div class="nav-item" data-key="rebate" style="--sec:#d97706" onclick="showItem('rebate')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">返利政策及核销</span>
+  </div>
+  <div class="nav-item" data-key="logistics-fee" style="--sec:#d97706" onclick="showItem('logistics-fee')">
+    <span class="nav-item-dot"></span>
+    <span class="nav-item-label">物流及其他费用</span>
+  </div>
+</div>
+
+</aside>
+
+<!-- 右侧主区 -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="main-title">行动中心</div>
+      <div class="topbar-sub" id="main-sub">从分销业务记录中实时汇总待办、时效和金额。</div>
+    </div>
+    <div class="topbar-user">
+      <span>李薇</span>
+      <div class="avatar">李</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- 行动中心（首页） -->
+    <div id="view-home">
+      <div class="kpi-row"><div class="kpi-card">
+  <div class="kpi-label">全部业务记录</div>
+  <div class="kpi-value" style="color:#1e293b">8529</div>
+  <div class="kpi-note">已纳入工作台</div>
+</div><div class="kpi-card">
+  <div class="kpi-label">待处理</div>
+  <div class="kpi-value" style="color:#1e293b">298</div>
+  <div class="kpi-note">尚未完成</div>
+</div><div class="kpi-card">
+  <div class="kpi-label">7 日内到期</div>
+  <div class="kpi-value" style="color:#d97706">0</div>
+  <div class="kpi-note">需优先关注</div>
+</div><div class="kpi-card">
+  <div class="kpi-label">已逾期</div>
+  <div class="kpi-value" style="color:#dc2626">142</div>
+  <div class="kpi-note">需立即处理</div>
+</div><div class="kpi-card">
+  <div class="kpi-label">累计金额</div>
+  <div class="kpi-value" style="color:#1e293b">¥287,706</div>
+  <div class="kpi-note">所有记录口径</div>
+</div></div>
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <div><div class="panel-title">消息列表</div><div class="panel-sub">接收报价、合同、物流、对账等业务状态变化</div></div>
+            <span class="panel-tag">模拟展示</span>
+          </div>
+          <div class="panel-body"><div class="feed-item">
+  <div class="feed-head">
+    <span class="feed-dot" style="background:#4b3fe3"></span>
+    <span class="feed-title">报价单已提交审核</span>
+    <span class="pill" style="background:#4b3fe318;color:#4b3fe3">报价变更</span>
+  </div>
+  <div class="feed-desc">分销负责人提交了 KONO 洗发水 Q4 报价单，待商务审核</div>
+  <div class="feed-time">10 分钟前</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <span class="feed-dot" style="background:#0ea5a0"></span>
+    <span class="feed-title">合同条款已更新</span>
+    <span class="pill" style="background:#0ea5a018;color:#0ea5a0">合同变更</span>
+  </div>
+  <div class="feed-desc">法务更新了保证金条款与控价红线约定</div>
+  <div class="feed-time">35 分钟前</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <span class="feed-dot" style="background:transparent"></span>
+    <span class="feed-title">资质材料已交付</span>
+    <span class="pill" style="background:#16a34a18;color:#16a34a">材料交付</span>
+  </div>
+  <div class="feed-desc">品牌方已上传营业执照与授权书，待合作方确认</div>
+  <div class="feed-time">1 小时前</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <span class="feed-dot" style="background:#dc2626"></span>
+    <span class="feed-title">物流状态异常预警</span>
+    <span class="pill" style="background:#dc262618;color:#dc2626">物流异常</span>
+  </div>
+  <div class="feed-desc">订单 #CH-2026-0914 物流停滞超过 48 小时</div>
+  <div class="feed-time">2 小时前</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <span class="feed-dot" style="background:transparent"></span>
+    <span class="feed-title">对账差异待确认</span>
+    <span class="pill" style="background:#d9770618;color:#d97706">对账差异</span>
+  </div>
+  <div class="feed-desc">9 月第 2 周对账发现 3 笔差异，合计 ¥1,240.00</div>
+  <div class="feed-time">昨天 16:20</div>
+</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div><div class="panel-title">待办事项</div><div class="panel-sub">集中查看合同审核、履约执行、财务对账等待处理事项</div></div>
+            <span class="panel-tag">模拟展示</span>
+          </div>
+          <div class="panel-body"><div class="feed-item">
+  <div class="feed-head">
+    <label class="todo-check"><input type="checkbox"><span></span></label>
+    <span class="feed-title">报价单审核待处理</span>
+    <span class="pill" style="background:#4b3fe318;color:#4b3fe3">合同审核</span>
+  </div>
+  <div class="feed-desc">KONO 洗发水 Q4 报价单等待商务确认</div>
+  <div class="feed-deadline">截止：今天 16:00</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <label class="todo-check"><input type="checkbox"><span></span></label>
+    <span class="feed-title">合同签署待跟进</span>
+    <span class="pill" style="background:#4b3fe318;color:#4b3fe3">合同审核</span>
+  </div>
+  <div class="feed-desc">河南澄清淘宝渠道补充协议待双方法务签署</div>
+  <div class="feed-deadline">截止：今天 18:00</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <label class="todo-check"><input type="checkbox"><span></span></label>
+    <span class="feed-title">资质到期提醒</span>
+    <span class="pill" style="background:#0ea5a018;color:#0ea5a0">履约执行</span>
+  </div>
+  <div class="feed-desc">授权书将于 10 月 15 日到期，需提前续期</div>
+  <div class="feed-deadline">截止：明天 10:00</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <label class="todo-check"><input type="checkbox"><span></span></label>
+    <span class="feed-title">物流异常待处理</span>
+    <span class="pill" style="background:#0ea5a018;color:#0ea5a0">履约执行</span>
+  </div>
+  <div class="feed-desc">联系物流商确认订单 #CH-2026-0914 配送状态</div>
+  <div class="feed-deadline">截止：明天 15:00</div>
+</div><div class="feed-item">
+  <div class="feed-head">
+    <label class="todo-check"><input type="checkbox"><span></span></label>
+    <span class="feed-title">对账差异待核实</span>
+    <span class="pill" style="background:#d9770618;color:#d97706">财务对账</span>
+  </div>
+  <div class="feed-desc">核实 9 月第 2 周 3 笔对账差异原因</div>
+  <div class="feed-deadline">截止：后天 12:00</div>
+</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 业务面板（子项） -->
+    <div id="view-item" style="display:none">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title" id="item-title">—</div>
+            <div class="panel-sub" id="item-desc">—</div>
+          </div>
+          <div class="toolbar" id="item-toolbar"></div>
+        </div>
+        <div id="item-table" style="overflow-x:auto"></div>
+        <div class="panel-foot">
+          <span id="item-count">共 0 条记录</span>
+          <span id="item-section">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PANELS = {"cust-type": {"name": "合作客户类型", "desc": "维护分销合作客户的类型、渠道与准入状态", "color": "#4b3fe3", "section": "合同审核类", "toolbar": ["新增客户类型", "批量导入", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>客户类型</th><th>客户名称</th><th>合作渠道</th><th>结算方式</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">品牌直营</td><td>KONO 官方旗舰店</td><td>天猫/抖音</td><td>月结 30 天</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>合作中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">渠道分销</td><td>河南澄清商贸</td><td>淘宝/拼多多</td><td>月结 45 天</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>合作中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">区域代理</td><td>华东美妆供应链</td><td>线下/私域</td><td>预付 + 月结</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待准入</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">一件代发</td><td>云集分销联盟</td><td>多平台</td><td>即时结算</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>合作中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "contract-flow": {"name": "合同审批流", "desc": "跟踪合同从起草、法务审核到签署的全流程节点", "color": "#4b3fe3", "section": "合同审核类", "toolbar": ["发起审批", "批量催办", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>合同编号</th><th>客户名称</th><th>当前节点</th><th>审批人</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">HT-2026-0912</td><td>KONO 官方旗舰店</td><td>法务审核</td><td>王法务</td><td>09-12 10:20</td><td><span class=\"pill\" style=\"background:#4b3fe318;color:#4b3fe3\"><i style=\"background:#4b3fe3\"></i>审批中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2026-0908</td><td>河南澄清商贸</td><td>商务签署</td><td>李商务</td><td>09-08 14:00</td><td><span class=\"pill\" style=\"background:#4b3fe318;color:#4b3fe3\"><i style=\"background:#4b3fe3\"></i>审批中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2026-0901</td><td>云集分销联盟</td><td>已归档</td><td>—</td><td>09-01 09:30</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已完成</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2026-0895</td><td>华东美妆供应链</td><td>条款修订</td><td>王法务</td><td>08-28 16:45</td><td><span class=\"pill\" style=\"background:#dc262618;color:#dc2626\"><i style=\"background:#dc2626\"></i>已驳回</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "contract-mgmt": {"name": "合同管理", "desc": "集中管理已签合同、附件、到期与续签提醒", "color": "#4b3fe3", "section": "合同审核类", "toolbar": ["上传合同", "到期提醒", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>合同编号</th><th>客户名称</th><th>合同金额</th><th>生效日期</th><th>到期日期</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">HT-2025-0601</td><td>KONO 官方旗舰店</td><td>¥520,000</td><td>2025-06-01</td><td>2026-05-31</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>生效中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2025-0715</td><td>河南澄清商贸</td><td>¥380,000</td><td>2025-07-15</td><td>2026-07-14</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>生效中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2025-0810</td><td>云集分销联盟</td><td>¥150,000</td><td>2025-08-10</td><td>2026-08-09</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>即将到期</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">HT-2024-1201</td><td>华东美妆供应链</td><td>¥260,000</td><td>2024-12-01</td><td>2025-11-30</td><td><span class=\"pill\" style=\"background:#dc262618;color:#dc2626\"><i style=\"background:#dc2626\"></i>已到期</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "discount": {"name": "客户选品折扣", "desc": "维护各客户的选品折扣、活动政策与控价红线", "color": "#0ea5a0", "section": "履约执行类", "toolbar": ["新增折扣", "批量改价", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>客户名称</th><th>商品</th><th>供货折扣</th><th>活动政策</th><th>控价红线</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">KONO 官方旗舰店</td><td>KONO 洗发水 500ml</td><td>5.5 折</td><td>满 199-30</td><td>¥59</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>生效中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">河南澄清商贸</td><td>KONO 护发素 400ml</td><td>6.0 折</td><td>买二送一</td><td>¥49</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>生效中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">云集分销联盟</td><td>KONO 洗发水 500ml</td><td>6.5 折</td><td>无</td><td>¥69</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待审核</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">华东美妆供应链</td><td>KONO 套装礼盒</td><td>5.0 折</td><td>满 299-50</td><td>¥129</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>生效中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "margin": {"name": "公司毛利测算", "desc": "测算各订单/客户的毛利、费用与净利，校验红线下限", "color": "#0ea5a0", "section": "履约执行类", "toolbar": ["新建测算", "导出报表", "刷新成本"], "table": "<table class=\"data-table\"><thead><tr><th>客户名称</th><th>出货价</th><th>成本价</th><th>毛利率</th><th>净利率</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">KONO 官方旗舰店</td><td>¥59.00</td><td>¥32.45</td><td>45.0%</td><td>28.3%</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>达标</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">河南澄清商贸</td><td>¥49.00</td><td>¥29.40</td><td>40.0%</td><td>22.1%</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>达标</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">云集分销联盟</td><td>¥69.00</td><td>¥44.85</td><td>35.0%</td><td>18.5%</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>预警</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">华东美妆供应链</td><td>¥129.00</td><td>¥64.50</td><td>50.0%</td><td>31.2%</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>达标</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "purchase": {"name": "采购订单管理", "desc": "采购下单、库存分配与采购进度跟踪", "color": "#0ea5a0", "section": "履约执行类", "toolbar": ["新建采购单", "审核入库", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>采购单号</th><th>供应商</th><th>商品</th><th>数量</th><th>金额</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">CG-2026-0915</td><td>广州日化工厂</td><td>KONO 洗发水</td><td>5,000</td><td>¥162,250</td><td><span class=\"pill\" style=\"background:#4b3fe318;color:#4b3fe3\"><i style=\"background:#4b3fe3\"></i>待入库</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CG-2026-0910</td><td>广州日化工厂</td><td>KONO 护发素</td><td>3,000</td><td>¥88,200</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>部分入库</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CG-2026-0905</td><td>东莞包装厂</td><td>套装礼盒</td><td>1,200</td><td>¥77,400</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已完成</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CG-2026-0901</td><td>广州日化工厂</td><td>KONO 洗发水</td><td>8,000</td><td>¥259,600</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已完成</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "ship-track": {"name": "出货跟踪", "desc": "出库、物流状态与签收结果跟踪", "color": "#0ea5a0", "section": "履约执行类", "toolbar": ["新建出货", "物流查询", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>出货单号</th><th>客户名称</th><th>物流单号</th><th>发货时间</th><th>预计到达</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">CH-2026-0916</td><td>KONO 官方旗舰店</td><td>SF1234567890</td><td>09-16 09:00</td><td>09-18</td><td><span class=\"pill\" style=\"background:#4b3fe318;color:#4b3fe3\"><i style=\"background:#4b3fe3\"></i>运输中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0915</td><td>河南澄清商贸</td><td>YTO9876543210</td><td>09-15 14:30</td><td>09-17</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已签收</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0914</td><td>云集分销联盟</td><td>JD1122334455</td><td>09-14 11:00</td><td>09-16</td><td><span class=\"pill\" style=\"background:#dc262618;color:#dc2626\"><i style=\"background:#dc2626\"></i>异常</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0912</td><td>华东美妆供应链</td><td>ZTO5566778899</td><td>09-12 16:20</td><td>09-15</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已签收</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "receipt": {"name": "客户回款清单", "desc": "记录客户回款、账期与欠款状态", "color": "#d97706", "section": "财务对账类", "toolbar": ["登记回款", "账龄分析", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>客户名称</th><th>应收金额</th><th>已回款</th><th>未回款</th><th>账期</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">KONO 官方旗舰店</td><td>¥486,200</td><td>¥420,000</td><td>¥66,200</td><td>月结 30 天</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>部分回款</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">河南澄清商贸</td><td>¥312,500</td><td>¥312,500</td><td>¥0</td><td>月结 45 天</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已结清</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">云集分销联盟</td><td>¥98,600</td><td>¥50,000</td><td>¥48,600</td><td>即时结算</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>部分回款</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">华东美妆供应链</td><td>¥205,400</td><td>¥180,000</td><td>¥25,400</td><td>预付+月结</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>部分回款</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "ship-invoice": {"name": "客户出货单", "desc": "按客户归集的出货明细与开票状态", "color": "#d97706", "section": "财务对账类", "toolbar": ["生成出货单", "开票", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>出货单号</th><th>客户名称</th><th>出货日期</th><th>数量</th><th>金额</th><th>开票状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">CH-2026-0916</td><td>KONO 官方旗舰店</td><td>2026-09-16</td><td>2,000</td><td>¥118,000</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已开票</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0915</td><td>河南澄清商贸</td><td>2026-09-15</td><td>1,500</td><td>¥73,500</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已开票</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0914</td><td>云集分销联盟</td><td>2026-09-14</td><td>800</td><td>¥55,200</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待开票</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">CH-2026-0912</td><td>华东美妆供应链</td><td>2026-09-12</td><td>1,200</td><td>¥154,800</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已开票</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "rebate": {"name": "返利政策及核销", "desc": "返利政策配置、达标核算与核销记录", "color": "#d97706", "section": "财务对账类", "toolbar": ["新建政策", "发起核销", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>政策名称</th><th>客户名称</th><th>返利比例</th><th>达标销售额</th><th>返利金额</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">Q3 冲量返利</td><td>KONO 官方旗舰店</td><td>3.0%</td><td>¥486,200</td><td>¥14,586</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待核销</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">年度框架返利</td><td>河南澄清商贸</td><td>2.5%</td><td>¥312,500</td><td>¥7,813</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已核销</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">新品推广返利</td><td>云集分销联盟</td><td>1.5%</td><td>¥98,600</td><td>¥1,479</td><td><span class=\"pill\" style=\"background:#4b3fe318;color:#4b3fe3\"><i style=\"background:#4b3fe3\"></i>核算中</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">套装激励返利</td><td>华东美妆供应链</td><td>2.0%</td><td>¥205,400</td><td>¥4,108</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待核销</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}, "logistics-fee": {"name": "物流及其他费用", "desc": "物流费、平台费、佣金及其他费用的归集与分摊", "color": "#d97706", "section": "财务对账类", "toolbar": ["录入费用", "费用分摊", "导出"], "table": "<table class=\"data-table\"><thead><tr><th>费用类型</th><th>关联客户</th><th>关联单号</th><th>金额</th><th>发生日期</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td class=\"cell-strong\">物流运费</td><td>KONO 官方旗舰店</td><td>CH-2026-0916</td><td>¥3,600</td><td>2026-09-16</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待分摊</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">平台佣金</td><td>河南澄清商贸</td><td>CH-2026-0915</td><td>¥2,205</td><td>2026-09-15</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已分摊</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">快递赔付</td><td>云集分销联盟</td><td>CH-2026-0914</td><td>¥800</td><td>2026-09-14</td><td><span class=\"pill\" style=\"background:#d9770618;color:#d97706\"><i style=\"background:#d97706\"></i>待分摊</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr><tr><td class=\"cell-strong\">仓储费用</td><td>华东美妆供应链</td><td>CH-2026-0912</td><td>¥1,548</td><td>2026-09-12</td><td><span class=\"pill\" style=\"background:#16a34a18;color:#16a34a\"><i style=\"background:#16a34a\"></i>已分摊</span></td><td class=\"cell-actions\"><button class=\"row-btn\">查看</button><button class=\"row-btn\">编辑</button></td></tr></tbody></table>"}};
+
+function showHome(){
+  document.getElementById('view-home').style.display = 'block';
+  document.getElementById('view-item').style.display = 'none';
+  document.getElementById('main-title').textContent = '行动中心';
+  document.getElementById('main-sub').textContent = '从分销业务记录中实时汇总待办、时效和金额。';
+  document.getElementById('nav-home').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+}
+
+function showItem(key){
+  const p = PANELS[key];
+  if(!p) return;
+  document.getElementById('view-home').style.display = 'none';
+  document.getElementById('view-item').style.display = 'block';
+  document.getElementById('main-title').textContent = p.name;
+  document.getElementById('main-sub').textContent = p.section;
+  document.getElementById('item-title').textContent = p.name;
+  document.getElementById('item-desc').textContent = p.desc;
+  const tb = document.getElementById('item-toolbar');
+  tb.innerHTML = p.toolbar.map((t,i)=>
+    `<button class="btn ${i===0?'btn-primary':''}" style="--sec:${p.color}">${t}</button>`
+  ).join('');
+  document.getElementById('item-table').innerHTML = p.table;
+  document.getElementById('item-count').textContent = '共 ' + document.querySelectorAll('#item-table tbody tr').length + ' 条记录';
+  document.getElementById('item-section').textContent = p.section;
+  document.getElementById('nav-home').classList.remove('active');
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.classList.toggle('active', el.dataset.key === key);
+  });
+}
+</script>
+</body>
+</html>
