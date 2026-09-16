@@ -6,252 +6,420 @@
 <title>分销工作台中枢</title>
 <style>
   :root{
-    --primary:#245eea; --primary-100:#dbeafe; --primary-soft:#eff4ff;
-    --text:#17243a; --muted:#64748b; --muted2:#94a3b8;
-    --border:#dbe4f0; --border-strong:#cbd5e1; --surface:#ffffff; --bg:#f1f5f9;
-    --radius:14px; --radius-md:9px; --radius-sm:6px;
-    --shadow-card:0 7px 24px rgba(40,111,216,.07);
-    --shadow-hover:0 14px 34px rgba(40,111,216,.16);
-    --l0:#94a3b8; --l1:#245eea; --l2:#0d9488; --l3:#d97706; --l4:#16a34a;
+    --dabo-blue:#4b3fe3; --dabo-ink:#171717; --dabo-muted:#666671;
+    --dabo-line:rgba(23,23,23,.09); --color-page:#f7f7f8; --color-surface:#fff;
+    --radius-lg:13px; --radius-md:9px; --radius-sm:6px;
+    --shadow-card:0 5px 14px rgba(23,32,51,.06);
+    --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
-    background:var(--bg);color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-    font-size:13px;min-height:100vh;display:flex;flex-direction:column;
+    background:var(--color-page);color:var(--dabo-ink);
+    font-family:var(--font-sans);font-size:14px;line-height:1.5;min-height:100vh;
   }
 
-  /* 顶栏 */
+  /* === 顶栏 === */
   .topbar{
-    height:60px;display:flex;align-items:center;justify-content:space-between;
-    padding:0 22px;background:var(--surface);border-bottom:1px solid var(--border);
-    flex-shrink:0;position:sticky;top:0;z-index:20;
+    position:sticky;top:0;z-index:12;min-height:60px;
+    display:grid;grid-template-columns:minmax(180px,1fr) minmax(280px,430px) minmax(260px,1fr);
+    align-items:center;gap:18px;padding:9px 24px;
+    border-bottom:1px solid var(--dabo-line);background:rgba(255,255,255,.95);
+    backdrop-filter:blur(12px);box-shadow:0 2px 10px rgba(23,32,51,.03);
   }
-  .brand{display:flex;align-items:center;gap:11px}
-  .logo{
-    width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,#245eea,#7c3aed);color:#fff;font-weight:700;font-size:15px;
-    box-shadow:0 4px 12px rgba(36,94,234,.35);
-  }
-  .brand h1{font-size:15.5px;font-weight:650;letter-spacing:.2px}
-  .brand .sub{font-size:11.5px;color:var(--muted);margin-top:1px}
-  .stats{display:flex;gap:10px}
-  .stat{
-    background:var(--primary-soft);border:1px solid var(--border);border-radius:var(--radius-md);
-    padding:6px 14px;text-align:center;min-width:78px;
-  }
-  .stat b{display:block;font-size:17px;font-weight:700;color:var(--primary);
-    font-variant-numeric:tabular-nums;line-height:1.15}
-  .stat span{font-size:11px;color:var(--muted)}
-  .stat.warn b{color:#d97706} .stat.ok b{color:#16a34a}
-
-  /* 主体 */
-  .main{flex:1;display:flex;min-height:0}
-
-  /* 侧栏 */
-  .sidebar{
-    width:284px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
-    padding:16px 14px;overflow-y:auto;
-  }
-  .side-title{font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--muted2);
-    text-transform:uppercase;margin:2px 4px 12px}
-  .seg{
-    border:1px solid var(--border);border-radius:var(--radius);
-    background:var(--surface);padding:13px 14px;margin-bottom:11px;cursor:pointer;
-    transition:.18s;position:relative;overflow:hidden;
-  }
-  .seg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
-  .seg:hover{border-color:var(--border-strong);box-shadow:var(--shadow-card);transform:translateY(-1px)}
-  .seg.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset,var(--shadow-hover);
-    background:linear-gradient(180deg,var(--bg),var(--surface))}
-  .seg .r1{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-  .seg .seq{
-    width:21px;height:21px;border-radius:50%;flex-shrink:0;font-size:12px;font-weight:600;
+  .topbar-left{display:flex;align-items:center;gap:12px}
+  .topbar-logo{
+    width:32px;height:32px;border-radius:8px;
+    background:linear-gradient(135deg,#4b3fe3,#7c3aed);
     display:flex;align-items:center;justify-content:center;
-    color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);border:1px solid var(--c);
+    color:#fff;font-weight:800;font-size:14px;
+    box-shadow:0 4px 12px rgba(75,63,227,.3);
   }
-  .seg .nm{font-size:13.5px;font-weight:650}
-  .seg .cnt{margin-left:auto;font-size:10.5px;font-weight:600;color:var(--c);
-    background:color-mix(in srgb,var(--c) 10%,#fff);border-radius:999px;padding:2px 8px}
-  .seg .ds{font-size:11.5px;color:var(--muted);line-height:1.5;margin-bottom:8px}
-  .seg .lr{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--muted)}
-  .badge{display:inline-flex;align-items:center;gap:4px;border-radius:var(--radius-sm);
-    padding:1px 7px;font-size:10.5px;font-weight:650;border:1px solid transparent}
-  .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-
-  /* 右面板 */
-  .panel{flex:1;min-width:0;overflow-y:auto;padding:18px 24px 44px}
-
-  .crumb{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:14px}
-  .crumb .cchip{background:var(--surface);border:1px solid var(--border);border-radius:999px;
-    padding:3px 11px;display:inline-flex;align-items:center;gap:5px}
-  .crumb .cchip b{color:var(--text);font-weight:600}
-  .crumb .cchip.on{border-color:var(--c);color:var(--c);
-    background:color-mix(in srgb,var(--c) 7%,#fff)}
-
-  .phead{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    box-shadow:var(--shadow-card);padding:16px 18px;margin-bottom:16px;
-    display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;
+  .topbar-title{font-size:15px;font-weight:700;color:var(--dabo-ink)}
+  .topbar-sub{font-size:11.5px;color:var(--dabo-muted);margin-top:1px}
+  .topbar-center{display:flex;align-items:center;gap:8px}
+  .topbar-search{
+    width:100%;max-width:360px;height:36px;padding:0 12px;
+    border:1px solid var(--dabo-line);border-radius:8px;
+    background:#f7f7f8;font-size:13px;color:var(--dabo-ink);
+    outline:none;transition:.15s;
   }
-  .phead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
-  .phead .pt{font-size:16.5px;font-weight:700}
-  .phead .pd{font-size:12px;color:var(--muted);margin-top:4px}
-  .phead .pr{margin-left:auto;display:flex;gap:26px;text-align:right}
-  .phead .pr .s b{font-size:15px;font-weight:700;color:var(--c);display:block}
-  .phead .pr .s span{font-size:11px;color:var(--muted)}
-
-  .handoff{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px}
-  .hchip{font-size:11.5px;color:var(--muted);border:1px dashed var(--border-strong);
-    border-radius:var(--radius-md);padding:6px 12px;background:var(--surface)}
-  .hchip b{color:var(--text);font-weight:600}
-  .hchip.rel{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 6%,#fff);color:var(--text)}
-
-  .nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
-  .node{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    box-shadow:var(--shadow-card);overflow:hidden;transition:.18s;display:flex;flex-direction:column;
+  .topbar-search:focus{border-color:var(--dabo-blue);box-shadow:0 0 0 3px rgba(75,63,227,.1)}
+  .topbar-right{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+  .topbar-stat{
+    display:flex;align-items:center;gap:6px;padding:5px 11px;
+    border-radius:8px;background:#f0eef9;color:var(--dabo-blue);
+    font-size:12px;font-weight:700;
   }
-  .node:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);border-color:var(--border-strong)}
-  .node .nh{display:flex;align-items:center;gap:10px;padding:13px 15px;
-    border-bottom:1px solid var(--border);background:var(--primary-soft)}
-  .node .code{font-size:10.5px;font-weight:700;color:#fff;background:var(--c);
-    border-radius:var(--radius-sm);padding:2px 8px;letter-spacing:.4px}
-  .node .nn{font-size:13.5px;font-weight:650}
-  .node .nlv{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted2)}
-  .node .nb{padding:13px 15px;display:flex;flex-direction:column;gap:11px}
-  .fld .k{font-size:10.5px;font-weight:600;letter-spacing:.5px;color:var(--muted2);margin-bottom:5px}
-  .fld .v{font-size:12.5px;color:var(--text);line-height:1.6}
-  .oplist{display:flex;flex-direction:column;gap:6px}
-  .op{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--text);
-    line-height:1.5;padding:7px 11px;border-radius:var(--radius-md);
-    background:var(--bg);border-left:2.5px solid var(--c)}
-  .op i{font-style:normal;font-weight:700;color:var(--c);flex-shrink:0;font-size:11px}
-  .pain{font-size:11.5px;line-height:1.55;color:#92400e;background:#fffbeb;
-    border:1px solid #fde68a;border-radius:var(--radius-md);padding:8px 11px}
+  .topbar-stat b{font-size:15px;font-variant-numeric:tabular-nums}
 
-  ::-webkit-scrollbar{width:9px;height:9px}
-  ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:6px}
-  ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+  /* === 主内容 === */
+  .content{width:min(1480px,100%);margin:0 auto;padding:22px 26px 30px}
 
-  @media(max-width:900px){
-    .main{flex-direction:column}
-    .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);
-      display:flex;gap:10px;overflow-x:auto;padding:12px}
-    .seg{min-width:232px;margin-bottom:0}
-    .side-title{display:none}
-    .nodes{grid-template-columns:1fr}
-    .stats{display:none}
+  /* === 面包屑 === */
+  .breadcrumb{display:flex;align-items:center;gap:8px;color:#8b95a7;font-size:12px;margin-bottom:14px}
+  .breadcrumb a{color:#8b95a7;text-decoration:none}
+  .breadcrumb a:hover{color:var(--dabo-blue)}
+  .breadcrumb .sep{color:#c5cad3}
+
+  /* === 页面头 === */
+  .page-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:18px}
+  .page-hero .eyebrow{color:var(--dabo-blue);font-size:12px;font-weight:820;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+  .page-hero h1{font-size:22px;font-weight:800;color:var(--dabo-ink);line-height:1.2}
+  .page-hero .desc{font-size:13px;color:var(--dabo-muted);margin-top:4px}
+  .page-hero .actions{display:flex;gap:8px;align-items:center}
+  .btn-primary{
+    min-height:38px;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+    padding:7px 14px;border:1px solid transparent;border-radius:8px;
+    color:#fff;background:var(--dabo-blue);box-shadow:0 5px 14px rgba(75,63,227,.18);
+    font-size:12px;font-weight:700;cursor:pointer;transition:.15s;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(75,63,227,.25)}
+  .btn-ghost{
+    min-height:38px;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+    padding:7px 14px;border:1px solid var(--dabo-line);border-radius:8px;
+    color:var(--dabo-ink);background:#fff;font-size:12px;font-weight:600;cursor:pointer;
+  }
+
+  /* === 指标网格 === */
+  .metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+  .metric-card{
+    min-height:88px;padding:14px 16px;border:1px solid var(--dabo-line);
+    border-radius:var(--radius-lg);background:var(--color-surface);
+    box-shadow:var(--shadow-card);display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .metric-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .metric-label{font-size:12px;color:var(--dabo-muted);font-weight:500}
+  .metric-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .metric-foot{display:flex;align-items:baseline;gap:6px}
+  .metric-value{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--dabo-ink)}
+  .metric-unit{font-size:12px;color:var(--dabo-muted)}
+
+  /* === 看板网格（核心双栏） === */
+  .board-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(300px,.75fr);gap:14px}
+
+  /* === 面板 === */
+  .panel{
+    min-width:0;overflow:hidden;border:1px solid var(--dabo-line);
+    border-radius:var(--radius-lg);background:var(--color-surface);
+    box-shadow:var(--shadow-card);
+  }
+  .panel-heading{
+    min-height:56px;display:flex;align-items:center;justify-content:space-between;
+    gap:16px;padding:12px 16px;border-bottom:1px solid #edf0f4;
+  }
+  .panel-heading h3{font-size:14px;font-weight:700;color:var(--dabo-ink)}
+  .panel-heading .count{font-size:11px;color:var(--dabo-muted);font-weight:500}
+
+  /* === 侧栏导航 === */
+  .sidebar-nav{padding:12px 0}
+  .nav-group{margin-bottom:4px}
+  .nav-group-title{
+    padding:6px 16px;font-size:11px;font-weight:700;color:var(--dabo-muted);
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:9px 16px;
+    cursor:pointer;transition:.12s;border-left:3px solid transparent;
+    font-size:13px;color:var(--dabo-ink);
+  }
+  .nav-item:hover{background:#f0eef9}
+  .nav-item.active{background:#ede9fe;border-left-color:var(--dabo-blue);font-weight:600}
+  .nav-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .nav-item .badge{
+    margin-left:auto;font-size:10px;font-weight:700;
+    padding:2px 7px;border-radius:999px;
+  }
+
+  /* === 节点列表 === */
+  .node-list{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+  .node-card{
+    padding:14px 16px;border:1px solid var(--dabo-line);border-radius:var(--radius-md);
+    cursor:pointer;transition:.15s;background:#fff;
+  }
+  .node-card:hover{border-color:var(--dabo-blue);box-shadow:0 4px 12px rgba(75,63,227,.08)}
+  .node-card.active{border-color:var(--dabo-blue);background:#f8f7ff;box-shadow:0 0 0 1px var(--dabo-blue) inset}
+  .node-card .node-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .node-card .node-code{
+    font-size:10px;font-weight:800;color:#fff;background:var(--seg-color,var(--dabo-blue));
+    border-radius:4px;padding:2px 7px;letter-spacing:.4px;
+  }
+  .node-card .node-name{font-size:13.5px;font-weight:650;color:var(--dabo-ink)}
+  .node-card .node-actor{font-size:11.5px;color:var(--dabo-muted);margin-bottom:6px}
+  .node-card .node-io{display:flex;gap:12px;font-size:11.5px;color:var(--dabo-muted)}
+  .node-card .node-io span{display:flex;align-items:center;gap:3px}
+
+  /* === 状态药丸 === */
+  .state-pill{
+    display:inline-flex;align-items:center;padding:3px 8px;
+    border-radius:999px;font-size:11px;font-weight:720;
+  }
+  .state-pill.l0{background:#f1f5f9;color:#64748b}
+  .state-pill.l1{background:#ede9fe;color:#4b3fe3}
+  .state-pill.l2{background:#ecfdf5;color:#0ea5a0}
+  .state-pill.l3{background:#fffbeb;color:#d97706}
+
+  /* === 详情面板 === */
+  .detail-panel{padding:0}
+  .detail-header{padding:16px;border-bottom:1px solid #edf0f4;background:#fafafa}
+  .detail-header .dh-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .detail-header .dh-code{
+    font-size:11px;font-weight:800;color:#fff;background:var(--seg-color,var(--dabo-blue));
+    border-radius:5px;padding:2px 8px;
+  }
+  .detail-header .dh-name{font-size:15px;font-weight:700}
+  .detail-header .dh-actor{font-size:12px;color:var(--dabo-muted)}
+  .detail-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+  .detail-section .ds-label{font-size:11px;font-weight:700;color:var(--dabo-muted);letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase}
+  .detail-section .ds-value{font-size:13px;color:var(--dabo-ink);line-height:1.6}
+  .ops-list{display:flex;flex-direction:column;gap:6px}
+  .op-item{
+    display:flex;align-items:flex-start;gap:8px;padding:8px 10px;
+    border-radius:var(--radius-sm);background:#f7f7f8;border-left:2.5px solid var(--seg-color,var(--dabo-blue));
+    font-size:12.5px;color:var(--dabo-ink);
+  }
+  .op-item .op-idx{font-weight:800;color:var(--seg-color,var(--dabo-blue));flex-shrink:0;font-size:11px}
+  .pain-box{
+    padding:10px 12px;border-radius:var(--radius-md);
+    background:#fffbeb;border:1px solid #fde68a;
+    font-size:12px;color:#92400e;line-height:1.55;
+  }
+
+  /* === 交接条 === */
+  .handoff-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .handoff-chip{
+    font-size:11.5px;color:var(--dabo-muted);border:1px dashed var(--dabo-line);
+    border-radius:var(--radius-md);padding:5px 11px;background:#fff;
+  }
+  .handoff-chip b{color:var(--dabo-ink);font-weight:600}
+  .handoff-chip.rel{border-style:solid;border-color:var(--seg-color);background:#f8f7ff;color:var(--dabo-ink)}
+
+  /* === 空状态 === */
+  .empty-state{padding:40px 20px;text-align:center;color:var(--dabo-muted);font-size:13px}
+
+  /* === 响应式 === */
+  @media(max-width:1100px){
+    .board-grid{grid-template-columns:1fr}
+    .metric-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:700px){
+    .topbar{grid-template-columns:1fr auto;gap:10px;padding:8px 14px}
+    .topbar-center{display:none}
+    .content{padding:14px 14px 24px}
+    .metric-grid{grid-template-columns:1fr 1fr}
+    .page-hero{flex-direction:column;align-items:flex-start;gap:12px}
   }
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">分</div>
-      <div>
-        <h1>分销工作台中枢</h1>
-        <div class="sub">电商发展部 · 线上分销经营 · 3 大聚合板块</div>
-      </div>
+
+<!-- 顶栏 -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">分</div>
+    <div>
+      <div class="topbar-title">分销工作台中枢</div>
+      <div class="topbar-sub">电商发展部 · 线上分销经营</div>
     </div>
-    <div class="stats">
-      <div class="stat"><b>3</b><span>业务板块</span></div>
-      <div class="stat"><b>7</b><span>分支节点</span></div>
-      <div class="stat ok"><b>5</b><span>正常运行</span></div>
-      <div class="stat warn"><b>2</b><span>待优化</span></div>
+  </div>
+  <div class="topbar-center">
+    <input class="topbar-search" placeholder="搜索节点、操作内容…" />
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-stat"><b>3</b>板块</div>
+    <div class="topbar-stat"><b>7</b>节点</div>
+    <div class="topbar-stat" style="background:#ecfdf5;color:#0ea5a0"><b>5</b>正常</div>
+    <div class="topbar-stat" style="background:#fffbeb;color:#d97706"><b>2</b>待优化</div>
+  </div>
+</div>
+
+<!-- 主内容 -->
+<div class="content">
+  <!-- 面包屑 -->
+  <div class="breadcrumb">
+    <a href="#">电商发展部中枢</a><span class="sep">/</span>
+    <a href="#">分销工作台</a><span class="sep">/</span>
+    <span id="crumb-seg">合同审核类</span>
+  </div>
+
+  <!-- 页面头 -->
+  <div class="page-hero">
+    <div>
+      <div class="eyebrow" id="hero-eyebrow">DISTRIBUTION WORKBENCH</div>
+      <h1 id="hero-title">合同审核类</h1>
+      <div class="desc" id="hero-desc">选品报价与合同条款审核，输出可执行的合作依据</div>
+    </div>
+    <div class="actions">
+      <button class="btn-ghost">导出 JSON</button>
+      <button class="btn-primary">查看全部流程 →</button>
     </div>
   </div>
 
-  <div class="main">
-    <aside class="sidebar">
-      <div class="side-title">业务板块</div>
-      <div id="segbox"></div>
-    </aside>
-    <section class="panel">
-      <div class="crumb" id="crumb"></div>
-      <div class="phead" id="phead"></div>
-      <div class="handoff" id="handoff"></div>
-      <div class="nodes" id="nodes"></div>
-    </section>
+  <!-- 指标网格 -->
+  <div class="metric-grid" id="metric-grid"></div>
+
+  <!-- 交接条 -->
+  <div class="handoff-bar" id="handoff-bar"></div>
+
+  <!-- 看板双栏 -->
+  <div class="board-grid">
+    <!-- 左：节点列表 -->
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 id="panel-title">分支节点</h3>
+        <span class="count" id="panel-count">0 项</span>
+      </div>
+      <div class="node-list" id="node-list"></div>
+    </div>
+
+    <!-- 右：详情面板 -->
+    <div class="panel detail-panel">
+      <div class="panel-heading">
+        <h3>节点详情</h3>
+        <span class="count" id="detail-code">—</span>
+      </div>
+      <div id="detail-body">
+        <div class="empty-state">← 选择左侧节点查看详情</div>
+      </div>
+    </div>
   </div>
+</div>
 
 <script>
-const SEGMENTS = [{"id": "C", "seq": "①", "name": "合同审核类", "color": "#245eea", "desc": "选品报价与合同条款审核，输出可执行的合作依据。", "lv": "L1", "target": "L3", "nodes": [{"code": "F1", "name": "选品报价与控价校验", "actor": "分销负责人 / 商品", "lv": "L1", "target": "L3", "type": "中枢🟡 + 人工👤", "input": "供货折扣、活动政策、成本、控价红线", "ops": ["生成选品报价单", "核算毛利与控价红线", "维护折扣/成本/红线参数", "提交至 F2 合同环节"], "output": "报价清单、政策与控价线", "pain": "毛利校验与自动报价尚未成型，当前以人工 + 表格为主"}, {"code": "F2", "name": "合作条款与法务审核", "actor": "分销商务 / 法务", "lv": "L1", "target": "L3", "type": "人工👤 + 文档/审批", "input": "报价、模板、保证金、控价约定", "ops": ["套用合同模板起草", "条款差异比对", "法务审核与补充协议", "协议版本留痕归档"], "output": "已审批合同、协议版本", "pain": "差异比对与版本留痕仍靠人工文档审批"}]}, {"id": "P", "seq": "②", "name": "履约执行类", "color": "#7c3aed", "desc": "资质授权、店铺机制、采购物流的落地执行。", "lv": "L1", "target": "L3", "nodes": [{"code": "F3", "name": "资质授权与材料交付", "actor": "分销商务 / 品牌", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "主体、营业执照、授权书、商标证", "ops": ["调取主体资质材料", "生成授权书", "交付合作方并留档", "资质到期提醒"], "output": "完整资质包、授权凭证", "pain": "资质/授权靠人工邮件，未形成在线闭环与到期提醒"}, {"code": "F4", "name": "店铺机制与价格管理", "actor": "分销运营 / 合作方", "lv": "L1", "target": "L3", "type": "外部🔶 + 人工👤", "input": "合同、商品资料、客服规则", "ops": ["店铺机制审核", "价格稽查与巡店", "物料/话术培训", "破价预警处置"], "output": "可运营店铺、价格与内容规范", "pain": "内部价格巡检与异常回流未打通，破价预警缺失"}, {"code": "F5", "name": "采购出货与物流跟踪", "actor": "分销运营 / 仓储", "lv": "L0", "target": "L2", "type": "ERP/表格 + 人工👤", "input": "采购单、库存、物流方案", "ops": ["采购录单", "分配库存", "计算运费与发货", "物流追踪与签收回传"], "output": "出库单、物流状态、签收结果", "pain": "订单/库存/物流状态未自动同步，缺异常预警"}]}, {"id": "S", "seq": "③", "name": "财务对账类", "color": "#db2777", "desc": "回款对账、发票核销与售后舆情闭环。", "lv": "L0", "target": "L2", "nodes": [{"code": "F6", "name": "财务对账与发票结算", "actor": "分销运营 / 财务", "lv": "L0", "target": "L3", "type": "人工👤 / 缺失🈳", "input": "回款、出货、物流、政策、发票", "ops": ["账单勾稽核对", "政策核销", "开具发票", "对账差异分级"], "output": "对账差异、核销结果、发票", "pain": "账单勾稽与发票仍以人工为主，是关键 L0"}, {"code": "F7", "name": "售后处理与舆情监控", "actor": "分销运营 / 客服", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "退货、漏发、投诉与舆情", "ops": ["售后工单登记", "规则分流派单", "舆情监控与摘要", "升级处理与复盘回流"], "output": "售后结论、责任与改进项", "pain": "售后与舆情处置依赖人工，未工单化，缺规则分流与升级闭环"}]}];
+const SEGMENTS = [{"id": "C", "seq": "①", "name": "合同审核类", "color": "#4b3fe3", "desc": "选品报价与合同条款审核，输出可执行的合作依据", "lv": "L1", "target": "L3", "nodes": [{"code": "F1", "name": "选品报价与控价校验", "actor": "分销负责人 / 商品", "lv": "L1", "target": "L3", "type": "中枢🟡 + 人工👤", "input": "供货折扣、活动政策、成本、控价红线", "ops": ["生成选品报价单", "核算毛利与控价红线", "维护折扣/成本/红线参数", "提交至 F2 合同环节"], "output": "报价清单、政策与控价线", "pain": "毛利校验与自动报价尚未成型，当前以人工 + 表格为主"}, {"code": "F2", "name": "合作条款与法务审核", "actor": "分销商务 / 法务", "lv": "L1", "target": "L3", "type": "人工👤 + 文档/审批", "input": "报价、模板、保证金、控价约定", "ops": ["套用合同模板起草", "条款差异比对", "法务审核与补充协议", "协议版本留痕归档"], "output": "已审批合同、协议版本", "pain": "差异比对与版本留痕仍靠人工文档审批"}]}, {"id": "P", "seq": "②", "name": "履约执行类", "color": "#0ea5a0", "desc": "资质授权、店铺机制、采购物流的落地执行", "lv": "L1", "target": "L3", "nodes": [{"code": "F3", "name": "资质授权与材料交付", "actor": "分销商务 / 品牌", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "主体、营业执照、授权书、商标证", "ops": ["调取主体资质材料", "生成授权书", "交付合作方并留档", "资质到期提醒"], "output": "完整资质包、授权凭证", "pain": "资质/授权靠人工邮件，未形成在线闭环与到期提醒"}, {"code": "F4", "name": "店铺机制与价格管理", "actor": "分销运营 / 合作方", "lv": "L1", "target": "L3", "type": "外部🔶 + 人工👤", "input": "合同、商品资料、客服规则", "ops": ["店铺机制审核", "价格稽查与巡店", "物料/话术培训", "破价预警处置"], "output": "可运营店铺、价格与内容规范", "pain": "内部价格巡检与异常回流未打通，破价预警缺失"}, {"code": "F5", "name": "采购出货与物流跟踪", "actor": "分销运营 / 仓储", "lv": "L0", "target": "L2", "type": "ERP/表格 + 人工👤", "input": "采购单、库存、物流方案", "ops": ["采购录单", "分配库存", "计算运费与发货", "物流追踪与签收回传"], "output": "出库单、物流状态、签收结果", "pain": "订单/库存/物流状态未自动同步，缺异常预警"}]}, {"id": "S", "seq": "③", "name": "财务对账类", "color": "#d97706", "desc": "回款对账、发票核销与售后舆情闭环", "lv": "L0", "target": "L2", "nodes": [{"code": "F6", "name": "财务对账与发票结算", "actor": "分销运营 / 财务", "lv": "L0", "target": "L3", "type": "人工👤 / 缺失🈳", "input": "回款、出货、物流、政策、发票", "ops": ["账单勾稽核对", "政策核销", "开具发票", "对账差异分级"], "output": "对账差异、核销结果、发票", "pain": "账单勾稽与发票仍以人工为主，是关键 L0"}, {"code": "F7", "name": "售后处理与舆情监控", "actor": "分销运营 / 客服", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "退货、漏发、投诉与舆情", "ops": ["售后工单登记", "规则分流派单", "舆情监控与摘要", "升级处理与复盘回流"], "output": "售后结论、责任与改进项", "pain": "售后与舆情处置依赖人工，未工单化，缺规则分流与升级闭环"}]}];
 const HANDOFFS = [["合同审核类", "履约执行类", "合同生效 → 材料交付"], ["履约执行类", "财务对账类", "发货完成 → 对账确认"], ["财务对账类", "合同审核类", "复盘回流 → 报价确认"]];
-const LVC = {"L0": "#94a3b8", "L1": "#245eea", "L2": "#0d9488", "L3": "#d97706", "L4": "#16a34a"};
-let cur = 0;
+const LVC = {"L0": "#94a3b8", "L1": "#4b3fe3", "L2": "#0ea5a0", "L3": "#d97706", "L4": "#16a34a"};
 
-function lvBadge(lv){
-  const c = LVC[lv] || '#94a3b8';
-  return `<span class="badge" style="color:${c};border-color:${c};background:${c}14">
-    <span class="dot" style="background:${c}"></span>${lv}</span>`;
+let curSeg = 0;
+let curNode = 0;
+
+function lvPill(lv){
+  const cls = lv.toLowerCase();
+  return `<span class="state-pill ${cls}">${lv}</span>`;
 }
 
-function renderSidebar(){
-  document.getElementById('segbox').innerHTML = SEGMENTS.map((s,i)=>`
-    <div class="seg ${i===cur?'on':''}" style="--c:${s.color}" onclick="select(${i})">
-      <div class="r1">
-        <span class="seq">${s.seq}</span>
-        <span class="nm">${s.name}</span>
-        <span class="cnt">${s.nodes.length} 项</span>
-      </div>
-      <div class="ds">${s.desc}</div>
-      <div class="lr">${lvBadge(s.lv)} <span>→</span> ${lvBadge(s.target)}</div>
-    </div>`).join('');
-}
-
-function renderPanel(){
-  const s = SEGMENTS[cur];
-  const phead = document.getElementById('phead');
-  phead.style.setProperty('--c', s.color);
-
-  document.getElementById('crumb').innerHTML =
-    '<span>模块工作流程</span>' + SEGMENTS.map((x,i)=>
-      `<span>›</span><span class="cchip ${i===cur?'on':''}" style="--c:${x.color}">
-        ${x.seq} <b>${x.name}</b></span>`).join('');
-
-  phead.innerHTML = `
-    <div>
-      <div class="pt">${s.seq} ${s.name}</div>
-      <div class="pd">${s.desc}</div>
+function renderMetrics(){
+  const s = SEGMENTS[curSeg];
+  const ok = s.nodes.filter(n=>n.lv!=='L0').length;
+  const warn = s.nodes.filter(n=>n.lv==='L0').length;
+  document.getElementById('metric-grid').innerHTML = `
+    <div class="metric-card">
+      <div class="metric-head"><span class="metric-label">分支节点</span><span class="metric-icon" style="background:#ede9fe;color:#4b3fe3">📋</span></div>
+      <div class="metric-foot"><span class="metric-value">${s.nodes.length}</span><span class="metric-unit">项</span></div>
     </div>
-    <div class="pr">
-      <div class="s"><b>${s.nodes.length}</b><span>分支节点</span></div>
-      <div class="s"><b>${s.lv} → ${s.target}</b><span>当前 → 目标</span></div>
-    </div>`;
+    <div class="metric-card">
+      <div class="metric-head"><span class="metric-label">当前层级</span><span class="metric-icon" style="background:#ecfdf5;color:#0ea5a0">📊</span></div>
+      <div class="metric-foot"><span class="metric-value">${s.lv}</span><span class="metric-unit">→ ${s.target}</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-head"><span class="metric-label">运行正常</span><span class="metric-icon" style="background:#ecfdf5;color:#0ea5a0">✓</span></div>
+      <div class="metric-foot"><span class="metric-value" style="color:#0ea5a0">${ok}</span><span class="metric-unit">项</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-head"><span class="metric-label">待优化</span><span class="metric-icon" style="background:#fffbeb;color:#d97706">⚠</span></div>
+      <div class="metric-foot"><span class="metric-value" style="color:#d97706">${warn}</span><span class="metric-unit">项</span></div>
+    </div>
+  `;
+}
 
-  document.getElementById('handoff').innerHTML = HANDOFFS.map(h=>{
+function renderHandoff(){
+  const s = SEGMENTS[curSeg];
+  document.getElementById('handoff-bar').innerHTML = HANDOFFS.map(h=>{
     const rel = h[0]===s.name || h[1]===s.name;
-    return `<div class="hchip ${rel?'rel':''}" style="${rel?'--c:'+s.color:''}">
+    return `<div class="handoff-chip ${rel?'rel':''}" style="${rel?'--seg-color:'+s.color:''}">
       <b>${h[0]}</b> → <b>${h[1]}</b> · ${h[2]}</div>`;
   }).join('');
+}
 
-  document.getElementById('nodes').innerHTML = s.nodes.map(n=>`
-    <div class="node" style="--c:${s.color}">
-      <div class="nh">
-        <span class="code">${n.code}</span>
-        <span class="nn">${n.name}</span>
-        <span class="nlv">${lvBadge(n.lv)}→${lvBadge(n.target)}</span>
+function renderNav(){
+  // 页面头
+  const s = SEGMENTS[curSeg];
+  document.getElementById('hero-title').textContent = s.seq + ' ' + s.name;
+  document.getElementById('hero-desc').textContent = s.desc;
+  document.getElementById('crumb-seg').textContent = s.name;
+  document.getElementById('panel-title').textContent = s.name + ' · 分支节点';
+  document.getElementById('panel-count').textContent = s.nodes.length + ' 项';
+}
+
+function renderNodes(){
+  const s = SEGMENTS[curSeg];
+  document.getElementById('node-list').innerHTML = s.nodes.map((n,i)=>`
+    <div class="node-card ${i===curNode?'active':''}" style="--seg-color:${s.color}" onclick="selectNode(${i})">
+      <div class="node-top">
+        <span class="node-code">${n.code}</span>
+        <span class="node-name">${n.name}</span>
+        <span style="margin-left:auto">${lvPill(n.lv)}</span>
       </div>
-      <div class="nb">
-        <div class="fld"><div class="k">👤 执行者 / 载体</div><div class="v">${n.actor} · ${n.type}</div></div>
-        <div class="fld"><div class="k">📥 输入</div><div class="v">${n.input}</div></div>
-        <div class="fld">
-          <div class="k">🛠️ 操作内容</div>
-          <div class="oplist">${n.ops.map((o,i)=>`<div class="op"><i>${i+1}</i><span>${o}</span></div>`).join('')}</div>
+      <div class="node-actor">${n.actor} · ${n.type}</div>
+      <div class="node-io">
+        <span>📥 ${n.input.length > 20 ? n.input.slice(0,20)+'…' : n.input}</span>
+        <span>📤 ${n.output.length > 20 ? n.output.slice(0,20)+'…' : n.output}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderDetail(){
+  const s = SEGMENTS[curSeg];
+  const n = s.nodes[curNode];
+  if(!n){
+    document.getElementById('detail-body').innerHTML = '<div class="empty-state">← 选择左侧节点查看详情</div>';
+    document.getElementById('detail-code').textContent = '—';
+    return;
+  }
+  document.getElementById('detail-code').textContent = n.code;
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-header" style="--seg-color:${s.color}">
+      <div class="dh-top">
+        <span class="dh-code">${n.code}</span>
+        ${lvPill(n.lv)} <span style="color:var(--dabo-muted);font-size:12px">→</span> ${lvPill(n.target)}
+      </div>
+      <div class="dh-name">${n.name}</div>
+      <div class="dh-actor">${n.actor} · ${n.type}</div>
+    </div>
+    <div class="detail-body" style="--seg-color:${s.color}">
+      <div class="detail-section">
+        <div class="ds-label">📥 输入</div>
+        <div class="ds-value">${n.input}</div>
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">🛠️ 操作内容</div>
+        <div class="ops-list">
+          ${n.ops.map((o,i)=>`<div class="op-item"><span class="op-idx">${i+1}</span><span>${o}</span></div>`).join('')}
         </div>
-        <div class="fld"><div class="k">📤 输出</div><div class="v">${n.output}</div></div>
-        <div class="pain">⚠ 当前痛点：${n.pain}</div>
       </div>
-    </div>`).join('');
+      <div class="detail-section">
+        <div class="ds-label">📤 输出</div>
+        <div class="ds-value">${n.output}</div>
+      </div>
+      <div class="detail-section">
+        <div class="ds-label">⚠ 当前痛点</div>
+        <div class="pain-box">${n.pain}</div>
+      </div>
+    </div>
+  `;
 }
 
-function select(i){
-  cur = i; renderSidebar(); renderPanel();
-  document.querySelector('.panel').scrollTop = 0;
+function selectSeg(i){
+  curSeg = i; curNode = 0;
+  renderAll();
 }
 
-renderSidebar(); renderPanel();
+function selectNode(i){
+  curNode = i;
+  renderNodes();
+  renderDetail();
+}
+
+function renderAll(){
+  renderMetrics();
+  renderHandoff();
+  renderNav();
+  renderNodes();
+  renderDetail();
+}
+
+// 初始化：默认选中第一个板块
+renderAll();
 </script>
 </body>
 </html>
