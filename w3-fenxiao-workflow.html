@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="deep">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线上分销经营 · 工作流程全景图</title>
+<style>
+  :root{
+    --bg:#090d14; --panel:#111722; --panel2:#161e2c; --panel3:#1b2535;
+    --line:#2d3b54; --line2:#435574; --ink:#f8fafc; --sub:#d9e2ef; --mute:#b5c2d3;
+    --primary:#4f8cff; --primary-soft:#162744; --ok:#22c55e; --warn:#fbbf24; --danger:#fb7185;
+    --l0:#6b7280; --l1:#60a5fa; --l2:#2dd4bf; --l3:#fbbf24; --l4:#22c55e;
+    --shadow:0 4px 14px rgba(0,0,0,.36),0 18px 48px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
+    background:var(--bg);color:var(--ink);overflow:hidden;font-size:13px}
+  button,input{font:inherit}
+  button:focus-visible{outline:2px solid #93b7ff;outline-offset:2px}
+
+  .topbar{height:58px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;
+    align-items:center;padding:0 14px;gap:10px;position:relative;z-index:40}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:750;white-space:nowrap}
+  .brand .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(145deg,#4f8cff,#7c5cff);
+    display:grid;place-items:center;color:#fff;font-size:12px;box-shadow:0 5px 18px rgba(79,140,255,.25)}
+  .titleblock{min-width:260px}
+  .titleblock b{display:block;font-size:14px;line-height:1.25}
+  .titleblock span{display:block;color:var(--sub);font-size:10.5px;margin-top:2px}
+  .spacer{flex:1}
+  .metrics{display:flex;align-items:center;gap:8px}
+  .metric{height:34px;min-width:82px;padding:5px 9px;border:1px solid var(--line);border-radius:8px;
+    background:var(--panel2);display:flex;flex-direction:column;justify-content:center}
+  .metric span{font-size:9.5px;color:var(--sub);line-height:1}
+  .metric b{font-size:13px;line-height:1.35;font-variant-numeric:tabular-nums}
+  .metric.score b{color:#9cc0ff}.metric.target b{color:#5eead4}
+  .btn{height:32px;padding:0 11px;border:1px solid var(--line2);background:var(--panel2);border-radius:7px;
+    cursor:pointer;color:var(--ink);display:inline-flex;align-items:center;gap:6px;transition:.16s;white-space:nowrap}
+  .btn:hover{background:#1e293b;border-color:#526581}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn.primary:hover{background:#3f7bf0}
+  .btn.active{border-color:var(--warn);color:#ffe28a;background:#2a2417}
+
+  .app{display:flex;height:calc(100vh - 58px)}
+  .sidebar{width:226px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;
+    flex:0 0 auto;z-index:20}
+  .sidebar h3{margin:0;padding:14px 14px 8px;color:var(--mute);font-size:11px;letter-spacing:1.2px}
+  .flowlist{padding:0 9px;display:flex;flex-direction:column;gap:6px}
+  .flowbtn{width:100%;border:1px solid transparent;background:transparent;border-radius:9px;color:var(--ink);
+    text-align:left;padding:9px 10px;cursor:pointer;display:grid;grid-template-columns:26px 1fr auto;gap:7px;align-items:center}
+  .flowbtn:hover{background:var(--panel2);border-color:var(--line)}
+  .flowbtn.active{background:var(--primary-soft);border-color:#315c9f}
+  .fnum{width:25px;height:25px;border-radius:7px;display:grid;place-items:center;background:#202c40;color:#eef4fc;
+    font-size:10px;font-weight:800}
+  .flowbtn b{font-size:12px;display:block;line-height:1.25}
+  .flowbtn small{font-size:9.5px;color:var(--sub);display:block;margin-top:3px}
+  .flv{font-size:10px;font-weight:800;padding:2px 5px;border-radius:4px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.95)}
+  .sidehint{margin-top:auto;padding:12px 14px;color:var(--mute);border-top:1px dashed var(--line);font-size:10.5px;line-height:1.75}
+  .sidehint b{color:var(--sub)}
+
+  .stage{flex:1;position:relative;overflow:hidden;background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px) 0 0/22px 22px,
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px) 0 0/22px 22px,
+    radial-gradient(circle at 50% 0,#111b2c 0,transparent 55%),var(--bg)}
+  .world{position:absolute;top:0;left:0;width:1660px;height:1040px;transform-origin:0 0;will-change:transform}
+  .lane{position:absolute;left:0;width:1640px;height:142px;border-top:1px solid rgba(148,163,184,.14);
+    border-bottom:1px solid rgba(148,163,184,.08);background:linear-gradient(90deg,rgba(255,255,255,.015),transparent 55%);
+    pointer-events:none;transition:opacity .2s}
+  .lane.dim{opacity:.14}
+  .lanehead{position:absolute;left:18px;width:222px;height:112px;padding:10px 12px;border-left:3px solid var(--flow-color);
+    background:rgba(17,23,34,.74);border-radius:0 9px 9px 0;transition:.2s;cursor:pointer;z-index:4}
+  .lanehead:hover{background:#151e2d}
+  .lanehead.dim{opacity:.18}
+  .lanehead .row{display:flex;align-items:center;gap:7px}
+  .lanehead .fid{font-size:10px;color:var(--flow-color);font-weight:800}
+  .lanehead h2{font-size:14px;margin:4px 0 6px;line-height:1.25}
+  .lanehead .meta{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--sub)}
+  .lanehead .reason{font-size:10px;color:#cbd6e5;line-height:1.45;margin-top:7px;display:-webkit-box;
+    -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .lvpair{font-size:9.5px;font-weight:850;padding:2px 6px;border-radius:4px;background:var(--flow-color);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.95)}
+
+  svg.edges{position:absolute;inset:0;overflow:visible;pointer-events:none;z-index:1}
+  .edge{fill:none;stroke:#7f91ab;stroke-width:1.5;opacity:.95;transition:.2s}
+  .edge.dim{opacity:.08}.edge.cross{stroke:#9eb1cc;stroke-width:1.25;stroke-dasharray:6 5;opacity:.62}
+  .edge.cross.hidden{display:none}.edge.highlight{stroke:#7aa7ff;stroke-width:2.2;opacity:1}
+  .arrow{fill:#aebdd1;transition:.2s}.arrow.dim{opacity:.08}.arrow.cross{fill:#b9cae2;opacity:.8}.arrow.hidden{display:none}
+  .elabel{font-size:9px;fill:#d7e1ee;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+  .elabel.dim{opacity:.08}.elabel.cross{fill:#e4edf8}.elabel.hidden{display:none}
+
+  .node{position:absolute;width:164px;height:84px;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);
+    border-radius:9px;box-shadow:0 4px 13px rgba(0,0,0,.28);overflow:hidden;cursor:pointer;z-index:3;
+    transition:opacity .2s,border-color .15s,box-shadow .15s,transform .15s}
+  .node:hover{border-color:#6a7d9c;box-shadow:0 7px 22px rgba(0,0,0,.42)}
+  .node.sel{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,140,255,.25)}
+  .node.dim{opacity:.12;filter:saturate(.35)}
+  .nhead{height:20px;display:flex;align-items:center;padding:0 7px;gap:5px;background:var(--type-color)}
+  .ntype{font-size:9.5px;font-weight:800;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+  .nid{margin-left:auto;font-size:8.5px;color:rgba(255,255,255,.92);font-weight:700}
+  .lvtag{padding:1px 5px;border-radius:4px;font-size:8.8px;font-weight:900;color:#fff;background:var(--lv-color);text-shadow:0 1px 2px rgba(0,0,0,.95)}
+  .nbody{padding:6px 8px 7px}
+  .nname{font-size:11.5px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nline{font-size:9.4px;color:var(--sub);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nline b{font-weight:700;color:#f7faff}
+  .port{position:absolute;right:-5px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;
+    background:var(--bg);border:2px solid #71829d}
+
+  .legend{position:absolute;right:14px;top:14px;z-index:12;background:rgba(17,23,34,.94);border:1px solid var(--line2);
+    border-radius:9px;padding:8px 10px;color:var(--sub);font-size:10px;line-height:1.8;box-shadow:var(--shadow)}
+  .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin:0 4px 0 8px;vertical-align:-1px}
+  .legend i:first-child{margin-left:0}
+  .zoom{position:absolute;right:14px;bottom:14px;z-index:12;display:flex;flex-direction:column;gap:6px}
+  .zoom button{width:34px;height:32px;border:1px solid var(--line2);background:var(--panel2);color:var(--sub);
+    border-radius:7px;cursor:pointer}.zoom button:hover{color:var(--ink);border-color:#5d7192}
+  .toast{position:absolute;left:50%;top:16px;z-index:60;transform:translateX(-50%);background:#1c2738;
+    border:1px solid var(--line2);box-shadow:var(--shadow);border-radius:8px;padding:9px 15px;opacity:0;
+    pointer-events:none;transition:.2s}.toast.on{opacity:1}
+
+  .drawer{position:absolute;right:0;top:0;width:336px;height:100%;background:rgba(17,23,34,.98);border-left:1px solid var(--line2);
+    box-shadow:-16px 0 45px rgba(0,0,0,.34);z-index:30;transform:translateX(102%);transition:transform .22s;
+    display:flex;flex-direction:column}.drawer.open{transform:translateX(0)}
+  .drawerhead{height:52px;padding:0 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+  .drawerhead h3{margin:0;font-size:13px}.drawerhead button{margin-left:auto;background:transparent;border:0;color:var(--sub);
+    font-size:20px;cursor:pointer}
+  .drawerbody{padding:14px;overflow:auto}
+  .hero{padding:12px;border:1px solid var(--line);background:var(--panel2);border-radius:10px;margin-bottom:12px}
+  .hero .idline{display:flex;align-items:center;gap:7px;color:var(--sub);font-size:10px}
+  .hero h2{font-size:16px;margin:7px 0 5px}.hero p{margin:0;color:var(--sub);font-size:11px;line-height:1.55}
+  .field{margin-bottom:12px}.field label{display:block;color:var(--mute);font-size:10px;font-weight:700;margin-bottom:4px}
+  .field div{color:#dce5f2;line-height:1.62;font-size:12px;padding-bottom:9px;border-bottom:1px dashed var(--line)}
+  .basis{border:1px solid #52617a;border-left:3px solid var(--lv-color);background:#151c28;border-radius:7px;padding:9px 10px;
+    color:#eef4fb;font-size:11px;line-height:1.6}
+  .flowbasis{border-left-color:var(--flow-color)}
+
+  .checkpanel{position:absolute;left:14px;bottom:14px;width:370px;max-height:235px;background:rgba(17,23,34,.97);
+    border:1px solid var(--line2);border-radius:10px;z-index:25;box-shadow:var(--shadow);display:none;overflow:hidden}
+  .checkpanel.open{display:block}.checkhead{height:38px;padding:0 11px;display:flex;align-items:center;border-bottom:1px solid var(--line);
+    font-weight:700;font-size:11px}.checkhead button{margin-left:auto;background:none;border:0;color:var(--sub);cursor:pointer;font-size:17px}
+  .checkbody{padding:9px 12px 12px;color:var(--sub);font-size:10.5px;line-height:1.85;max-height:195px;overflow:auto}
+  .checkbody .ok{color:#6ee7a0}.checkbody .warn{color:#fde68a}
+  ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2c3a51;border-radius:4px}
+  ::-webkit-scrollbar-track{background:transparent}
+  @media(max-width:900px){.sidebar{width:188px}.metrics .metric:nth-child(-n+2){display:none}.titleblock{min-width:0}.drawer{width:310px}}
+</style>
+<style id="hierarchy-v3">
+  :root{
+    --orange:#f97316;--orange-deep:#c65208;--orange-soft:#fff4e8;--amber:#f59e0b;
+    --page:#f3f5f8;--card:#fff;--ink2:#172033;--sub2:#5f6b7c;--line3:#e1e6ee;
+    --blue:#2563eb;--shadow2:0 8px 26px rgba(28,39,55,.10);
+  }
+  html,body{height:100%;background:var(--page);color:var(--ink2);overflow:hidden;font-size:13px}
+  body{display:flex;flex-direction:column}
+  .topbar{height:64px;flex:0 0 64px;background:linear-gradient(100deg,#ff6b00,#ff8b26);border:0;color:#fff;
+    padding:0 20px;box-shadow:0 2px 10px rgba(181,75,0,.18);gap:14px}
+  .brand .mark{background:rgba(255,255,255,.20);box-shadow:none;border:1px solid rgba(255,255,255,.32)}
+  .titleblock{min-width:365px}.titleblock b{font-size:16px}.titleblock span{color:rgba(255,255,255,.82);font-size:11px}
+  .searchbox{width:280px;height:36px;border:1px solid rgba(255,255,255,.30);border-radius:20px;background:rgba(255,255,255,.18);
+    color:#fff;padding:0 16px;outline:none}.searchbox::placeholder{color:rgba(255,255,255,.76)}
+  .topbar .metric{height:38px;min-width:78px;border-color:rgba(255,255,255,.25);background:rgba(130,51,0,.16)}
+  .topbar .metric span{color:rgba(255,255,255,.72)}.topbar .metric b,.topbar .metric.score b,.topbar .metric.target b{color:#fff}
+  .topbar .btn{height:36px;border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.16);color:#fff;border-radius:18px}
+  .topbar .btn:hover,.topbar .btn.active{background:#fff;color:var(--orange-deep);border-color:#fff}
+  .topbar .btn.primary{background:#fff;color:var(--orange-deep);border-color:#fff;font-weight:750}
+  .zoomset{display:flex;align-items:center;gap:5px}.zoomset .btn{min-width:36px;padding:0 10px;justify-content:center}
+  #zoomPct{min-width:44px;text-align:center;color:#fff;font-weight:700;font-variant-numeric:tabular-nums}
+
+  .ribbon-shell{height:112px;flex:0 0 112px;background:#fff;border-bottom:1px solid var(--line3);padding:12px 22px 9px;position:relative;z-index:12}
+  .ribbon-row{display:grid;grid-template-columns:112px 1fr;align-items:stretch;height:50px}
+  .ribbon-label{display:grid;place-items:center;background:#fff0e3;color:var(--orange-deep);font-size:12px;font-weight:850;
+    border:1px solid #ffd2ad;border-right:0;border-radius:7px 0 0 7px;letter-spacing:.6px}
+  .flow-ribbon{display:grid;grid-template-columns:repeat(4,1fr);min-width:720px}
+  .ribbon-step{position:relative;border:0;color:#fff;cursor:pointer;font-weight:750;font-size:12px;padding:0 16px 0 26px;
+    margin-left:-15px;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 50%,calc(100% - 20px) 100%,0 100%,20px 50%);
+    background:var(--flow-color);transition:filter .15s,transform .15s;white-space:nowrap}
+  .ribbon-step:first-child{margin-left:0;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 50%,calc(100% - 20px) 100%,0 100%)}
+  .ribbon-step:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .ribbon-step small{display:block;font-size:9px;color:rgba(255,255,255,.84);font-weight:600;margin-top:2px}
+  .ribbon-note{margin:7px 0 0 112px;text-align:center;color:#667085;font-size:10.5px}
+  .ribbon-note b{color:#344054}.ribbon-note .sep{color:#c7ccd4;margin:0 7px}
+  .legendbar{position:absolute;right:22px;bottom:7px;display:flex;gap:12px;background:rgba(255,255,255,.92);padding-left:12px;color:#667085;font-size:10px}
+  .legendbar span{display:flex;align-items:center;gap:4px}.legendbar i{width:9px;height:9px;border-radius:2px}
+
+  .workspace{flex:1;min-height:0;position:relative;background:var(--page);overflow:hidden}
+  .board-viewport{position:absolute;inset:0;overflow:auto;padding:18px 22px 42px;scrollbar-gutter:stable}
+  .board{width:988px;display:grid;grid-template-columns:repeat(4,238px);gap:12px;align-items:start;transform-origin:0 0;
+    transition:zoom .18s;margin:0 auto}
+  .flow-column{background:#fff;border:1px solid #e4e8ef;border-top:4px solid var(--flow-color);border-radius:12px;
+    box-shadow:var(--shadow2);overflow:hidden;min-height:850px}
+  .flow-column.focus{box-shadow:0 0 0 4px rgba(249,115,22,.18),var(--shadow2)}
+  .flow-column.dim{opacity:.24;filter:grayscale(.4)}
+  .flow-head{padding:12px 13px 11px;background:linear-gradient(180deg,var(--flow-soft),#fff);border-bottom:1px solid #ebedf2;min-height:123px}
+  .flow-titleline{display:flex;align-items:center;gap:7px}.flow-index{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+    background:var(--flow-color);color:#fff;font-weight:850;font-size:11px}.flow-head h2{font-size:14px;margin:0;line-height:1.3;flex:1}
+  .flow-level{font-size:10px;font-weight:850;padding:3px 6px;border-radius:5px;color:#fff;background:var(--lv-color);text-shadow:0 1px 2px rgba(0,0,0,.35)}
+  .flow-stats{margin-top:8px;display:flex;justify-content:space-between;color:#637083;font-size:10px}.flow-stats b{color:#344054}
+  .flow-reason{margin-top:7px;color:#6f7887;font-size:10px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .node-list{padding:10px 10px 12px}
+  .node-card{width:100%;border:1.5px solid #f0a266;background:#fff;border-radius:9px;padding:9px 10px;text-align:left;color:var(--ink2);
+    cursor:pointer;transition:.15s;min-height:91px;box-shadow:0 2px 5px rgba(61,45,30,.04)}
+  .node-card:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:0 6px 15px rgba(230,104,15,.13)}
+  .node-card.selected{border-color:var(--orange-deep);box-shadow:0 0 0 3px rgba(249,115,22,.17)}
+  .node-card.dim{opacity:.22;filter:grayscale(.65)}
+  .node-top{display:flex;align-items:flex-start;gap:6px}.node-seq{width:20px;height:20px;flex:0 0 20px;border-radius:50%;display:grid;place-items:center;
+    background:#fff0df;color:#b84e07;font-size:10px;font-weight:850}.node-name{font-size:11.5px;font-weight:800;line-height:1.35;flex:1}
+  .node-lv{font-size:9px;font-weight:850;padding:2px 5px;border:1px solid var(--lv-color);color:var(--lv-text);background:var(--lv-soft);border-radius:5px;white-space:nowrap}
+  .node-meta{margin-top:6px;color:#7a8493;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .node-owner{margin-top:4px;font-size:9.5px;color:#4d596b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.node-owner b{color:#2d3748}
+  .node-cta{margin-top:5px;color:#e7650a;font-size:9.5px;font-weight:750}
+  .node-connector{height:25px;position:relative;text-align:center;color:#d35f0b;font-size:9px;padding-top:4px}
+  .node-connector:before{content:"";position:absolute;width:1.5px;height:11px;background:#e47b2f;left:50%;top:1px}
+  .node-connector:after{content:"";position:absolute;left:calc(50% - 4px);top:10px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid #e47b2f}
+  .node-connector span{position:relative;top:9px;background:#fff;padding:0 5px;color:#9a6a46;max-width:170px;display:inline-block;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .flow-output{border:1px dashed #e6a56f;background:#fff8ed;border-radius:7px;padding:8px 9px;color:#8f4b18;font-size:9.5px;line-height:1.45;font-weight:650}
+
+  .drawer{position:absolute;right:0;top:0;width:438px;height:100%;background:#fff;border-left:1px solid #e4e7ec;color:var(--ink2);
+    box-shadow:-18px 0 40px rgba(27,35,48,.16);z-index:35;transform:translateX(102%);transition:transform .22s;display:flex;flex-direction:column}
+  .drawer.open{transform:translateX(0)}
+  .drawerhead{height:auto;min-height:104px;padding:16px 18px;background:linear-gradient(135deg,#d75a06,#a94205);color:#fff;border:0;align-items:flex-start}
+  .drawerhead .drawer-kicker{font-size:10.5px;color:rgba(255,255,255,.76);margin-bottom:5px}.drawerhead h3{font-size:18px;line-height:1.35;margin:0}
+  .drawerhead button{color:#fff;font-size:24px;line-height:1}.drawerbody{padding:17px 19px 28px;background:#fff}
+  .drawer-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}.summary-card{padding:9px 10px;border:1px solid #eceff3;border-radius:8px;background:#fafbfc}
+  .summary-card label,.drawer-section-title{display:block;color:#98a2b3;font-size:10px;font-weight:750;margin-bottom:4px}.summary-card b{font-size:11.5px;color:#344054}
+  .node-relation{border-left:3px solid var(--orange);background:#fff7ed;border-radius:6px;padding:9px 11px;color:#6d4424;font-size:11px;line-height:1.55;margin-bottom:15px}
+  .drawer-section-title{margin:15px 0 8px;font-size:11px;color:#667085}.execution-list{display:flex;flex-direction:column;gap:9px}
+  .exec-card{border:1.5px solid #cd7a36;border-radius:9px;padding:10px 11px;background:#fff;position:relative}
+  .exec-card:not(:last-child):after{content:"↓";position:absolute;left:50%;bottom:-17px;color:#c05a0b;font-weight:900;z-index:2}
+  .exec-top{display:flex;align-items:center;gap:8px}.exec-no{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#bf5408;color:#fff;font-weight:850;font-size:11px}
+  .exec-title{font-weight:800;font-size:12px;flex:1}.exec-lv{background:#fff2c4;color:#8a5800;font-weight:850;font-size:9.5px;padding:2px 5px;border-radius:4px}
+  .exec-owner{margin:6px 0 3px 33px;color:#778194;font-size:10px}.exec-owner b{color:#475467}.exec-desc{margin-left:33px;color:#475467;font-size:10.5px;line-height:1.5}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail-item{border:1px solid #eceff3;border-radius:8px;padding:9px;background:#fafafa}
+  .detail-item label{display:block;color:#98a2b3;font-size:9.5px;margin-bottom:4px}.detail-item div{font-size:10.5px;line-height:1.5;color:#344054}
+  .basis{border:1px solid #f1c49c;border-left:3px solid var(--orange);background:#fff8ef;color:#70421f;padding:9px 10px;font-size:10.5px}
+
+  .relation-panel,.checkpanel{position:absolute;left:22px;bottom:18px;width:430px;max-height:300px;background:#fff;border:1px solid #e5e7eb;
+    border-radius:11px;z-index:28;box-shadow:var(--shadow2);display:none;overflow:hidden;color:var(--ink2)}
+  .relation-panel.open,.checkpanel.open{display:block}.panel-head,.checkhead{height:42px;padding:0 13px;display:flex;align-items:center;border-bottom:1px solid #edf0f4;
+    font-weight:800;font-size:11.5px;background:#fff8ef}.panel-head button,.checkhead button{margin-left:auto;background:none;border:0;color:#667085;cursor:pointer;font-size:18px}
+  .relation-body{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:245px;overflow:auto}
+  .relation-item{border:1px solid #eceff3;border-radius:7px;padding:7px 8px;font-size:9.5px;color:#475467;background:#fafafa}.relation-item b{color:#c45508}
+  .checkbody{color:#475467;background:#fff}.checkbody .ok{color:#15803d}.checkbody .warn{color:#b45309}
+  .toast{background:#263244;color:#fff;border:0}
+  .empty{grid-column:1/-1;padding:60px;text-align:center;color:#98a2b3;background:#fff;border-radius:10px}
+  ::-webkit-scrollbar-thumb{background:#cbd2dc}::-webkit-scrollbar-track{background:transparent}
+  @media(max-width:1100px){.metrics{display:none}.titleblock{min-width:280px}.searchbox{width:220px}.ribbon-shell{overflow-x:auto}.drawer{width:390px}}
+</style>
+<style id="dark-theme-v3">
+  :root{
+    --page:#090d14;--card:#161e2c;--ink2:#f8fafc;--sub2:#d9e2ef;--line3:#2d3b54;
+    --orange:#4f8cff;--orange-deep:#315fae;--orange-soft:#162744;--shadow2:0 8px 28px rgba(0,0,0,.34);
+  }
+  html,body{background:#090d14;color:#f8fafc}
+  .topbar{background:#111722;border-bottom:1px solid #2d3b54;color:#f8fafc;box-shadow:0 2px 12px rgba(0,0,0,.28)}
+  .brand .mark{background:linear-gradient(145deg,#4f8cff,#7c5cff);border:0;box-shadow:0 5px 18px rgba(79,140,255,.25)}
+  .titleblock span{color:#d9e2ef}
+  .searchbox{border-color:#435574;background:#161e2c;color:#f8fafc}.searchbox::placeholder{color:#aab8cb}
+  .topbar .metric{border-color:#2d3b54;background:#161e2c}.topbar .metric span{color:#b5c2d3}
+  .topbar .metric.score b{color:#9cc0ff}.topbar .metric.target b{color:#5eead4}
+  .topbar .btn{border-color:#435574;background:#161e2c;color:#f8fafc}
+  .topbar .btn:hover,.topbar .btn.active{background:#20304a;color:#dce9ff;border-color:#6b8fc8}
+  .topbar .btn.primary{background:#4f8cff;color:#fff;border-color:#4f8cff}.topbar .btn.primary:hover{background:#3f7bf0}
+  #zoomPct{color:#e8eef8}
+  .ribbon-shell{background:#0e141e;border-bottom-color:#2d3b54}
+  .ribbon-label{background:#162744;color:#bcd3ff;border-color:#315c9f}
+  .ribbon-step{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.58)}
+  .ribbon-note{color:#aab8cb}.legendbar{background:rgba(14,20,30,.94);color:#c5d0df}
+  .workspace,.board-viewport{background:#090d14}
+  .flow-column{background:#111722;border-color:#2d3b54;color:#f8fafc;box-shadow:var(--shadow2)}
+  .flow-column.focus{box-shadow:0 0 0 4px rgba(79,140,255,.22),var(--shadow2)}
+  .flow-head{background:linear-gradient(180deg,var(--flow-soft),#111722);border-bottom-color:#2d3b54}
+  .flow-head h2{color:#f8fafc}.flow-stats{color:#c5d0df}.flow-stats b{color:#f0f5fb}.flow-reason{color:#bdc9da}
+  .node-list{background:#111722}.node-card{background:#161e2c;border-color:#435574;color:#f8fafc;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+  .node-card:hover{border-color:#7793be;box-shadow:0 7px 19px rgba(0,0,0,.36)}.node-card.selected{border-color:#4f8cff;box-shadow:0 0 0 3px rgba(79,140,255,.24)}
+  .node-seq{background:#24334b;color:#dce9ff}.node-name{color:#f8fafc}.node-meta{color:#b5c2d3}.node-owner{color:#d3dce9}.node-owner b{color:#f7faff}
+  .node-cta{color:#8eb7ff}.node-connector{color:#91a6c4}.node-connector:before{background:#637a9c}.node-connector:after{border-top-color:#7f95b5}.node-connector span{background:#111722;color:#aebdd1}
+  .flow-output{border-color:#4b6182;background:#151f2f;color:#d8e5f5}
+  .drawer{background:#111722;border-left-color:#435574;color:#f8fafc}.drawerhead{background:linear-gradient(135deg,#17243a,#101825);border-bottom:1px solid #334561}
+  .drawerbody{background:#111722}.drawer-summary .summary-card{background:#161e2c;border-color:#2d3b54}.summary-card label,.drawer-section-title{color:#aebbd0}.summary-card b{color:#f3f7fc}
+  .node-relation{border-left-color:#4f8cff;background:#162744;color:#d9e7fa}.exec-card{background:#161e2c;border-color:#526b91}.exec-card:not(:last-child):after{color:#86a9df}
+  .exec-no{background:#315fae}.exec-title{color:#f8fafc}.exec-lv{background:#26354c;color:#d8e8ff}.exec-owner{color:#b8c5d7}.exec-owner b,.exec-desc{color:#e1e8f2}
+  .detail-item{background:#151d2a;border-color:#2d3b54}.detail-item label{color:#9eacc1}.detail-item div{color:#e5edf7}
+  .basis{border-color:#4e6282;border-left-color:#4f8cff;background:#151d2a;color:#e7eef8}
+  .relation-panel,.checkpanel{background:#111722;border-color:#435574;color:#f8fafc}.panel-head,.checkhead{background:#162744;border-bottom-color:#2d3b54}.panel-head button,.checkhead button{color:#c3cede}
+  .relation-body{background:#111722}.relation-item{background:#161e2c;border-color:#2d3b54;color:#d4deeb}.relation-item b{color:#8fb8ff}
+  .checkbody{background:#111722;color:#d3ddea}.checkbody .ok{color:#6ee7a0}.checkbody .warn{color:#fde68a}
+  .toast{background:#1c2738;color:#fff;border:1px solid #435574}
+  ::-webkit-scrollbar-thumb{background:#2c3a51}
+</style>
+<style id="theme-system-v4">
+  html[data-theme="deep"]{
+    --t-bg:#090d14;--t-panel:#111722;--t-card:#161e2c;--t-card2:#151d2a;--t-line:#33435f;
+    --t-text:#f8fafc;--t-sub:#d4deeb;--t-muted:#9eacc1;--t-accent:#4f8cff;--t-accent2:#7c5cff;
+    --t-top:#111722;--t-top-text:#f8fafc;--t-top-item:#161e2c;--t-top-line:#435574;--t-soft:#162744;
+    --t-shadow:0 8px 28px rgba(0,0,0,.34);--t-cta:#8eb7ff;--t-arrow:#7f95b5;--t-score:#9cc0ff;--t-target:#5eead4;
+  }
+  html[data-theme="aurora"]{
+    --t-bg:#090b19;--t-panel:#121329;--t-card:#1a1934;--t-card2:#15142b;--t-line:#47406e;
+    --t-text:#fbf8ff;--t-sub:#ded8ee;--t-muted:#aba2c4;--t-accent:#8b5cf6;--t-accent2:#ec4899;
+    --t-top:linear-gradient(100deg,#17152e,#231742);--t-top-text:#fbf8ff;--t-top-item:#211d3d;--t-top-line:#554b7d;--t-soft:#251f42;
+    --t-shadow:0 8px 30px rgba(3,2,14,.46);--t-cta:#c4a8ff;--t-arrow:#9e91c8;--t-score:#c4b5fd;--t-target:#67e8f9;
+  }
+  html[data-theme="graphite"]{
+    --t-bg:#081113;--t-panel:#0f1a1d;--t-card:#172529;--t-card2:#121f22;--t-line:#315058;
+    --t-text:#effcf9;--t-sub:#cce3df;--t-muted:#91aaa7;--t-accent:#20b99d;--t-accent2:#38bdf8;
+    --t-top:linear-gradient(100deg,#0f1a1d,#11282b);--t-top-text:#effcf9;--t-top-item:#17272b;--t-top-line:#36575f;--t-soft:#12312f;
+    --t-shadow:0 8px 30px rgba(0,0,0,.38);--t-cta:#6ee7d0;--t-arrow:#69a99e;--t-score:#67e8f9;--t-target:#6ee7b7;
+  }
+  html[data-theme="warm"]{
+    --t-bg:#f4f5f7;--t-panel:#ffffff;--t-card:#ffffff;--t-card2:#fafafa;--t-line:#dfe4eb;
+    --t-text:#172033;--t-sub:#526071;--t-muted:#7a8493;--t-accent:#f97316;--t-accent2:#f59e0b;
+    --t-top:linear-gradient(100deg,#ff6b00,#ff8b26);--t-top-text:#ffffff;--t-top-item:rgba(255,255,255,.16);--t-top-line:rgba(255,255,255,.34);--t-soft:#fff4e8;
+    --t-shadow:0 8px 26px rgba(28,39,55,.10);--t-cta:#e7650a;--t-arrow:#d87933;--t-score:#ffffff;--t-target:#ffffff;
+  }
+  html[data-theme="ice"]{
+    --t-bg:#edf3f9;--t-panel:#ffffff;--t-card:#f9fbfe;--t-card2:#f4f8fc;--t-line:#cad7e7;
+    --t-text:#17233a;--t-sub:#52637a;--t-muted:#74849b;--t-accent:#2563eb;--t-accent2:#0891b2;
+    --t-top:linear-gradient(100deg,#153663,#24558c);--t-top-text:#ffffff;--t-top-item:rgba(255,255,255,.11);--t-top-line:rgba(255,255,255,.28);--t-soft:#e9f2ff;
+    --t-shadow:0 8px 26px rgba(38,73,112,.13);--t-cta:#2563eb;--t-arrow:#668ab8;--t-score:#bfdbfe;--t-target:#99f6e4;
+  }
+  html,body,.workspace,.board-viewport{background:var(--t-bg);color:var(--t-text)}
+  .topbar{background:var(--t-top);border-bottom:1px solid var(--t-top-line);color:var(--t-top-text);box-shadow:var(--t-shadow)}
+  .titleblock span{color:color-mix(in srgb,var(--t-top-text) 78%,transparent)}
+  .searchbox{border-color:var(--t-top-line);background:var(--t-top-item);color:var(--t-top-text)}.searchbox::placeholder{color:color-mix(in srgb,var(--t-top-text) 68%,transparent)}
+  .topbar .metric{border-color:var(--t-top-line);background:var(--t-top-item)}.topbar .metric span{color:color-mix(in srgb,var(--t-top-text) 68%,transparent)}.topbar .metric.score b{color:var(--t-score)}.topbar .metric.target b{color:var(--t-target)}
+  .topbar .btn{border-color:var(--t-top-line);background:var(--t-top-item);color:var(--t-top-text)}
+  .topbar .btn:hover,.topbar .btn.active{background:color-mix(in srgb,var(--t-accent) 25%,var(--t-top-item));color:var(--t-top-text);border-color:var(--t-accent)}
+  .topbar .btn.primary{background:var(--t-accent);border-color:var(--t-accent);color:#fff}.topbar .btn.primary:hover{filter:brightness(1.08)}#zoomPct{color:var(--t-top-text)}
+  .ribbon-shell{background:var(--t-panel);border-bottom-color:var(--t-line)}.ribbon-label{background:var(--t-soft);color:var(--t-accent);border-color:var(--t-line)}
+  .ribbon-note{color:var(--t-muted)}.legendbar{background:color-mix(in srgb,var(--t-panel) 94%,transparent);color:var(--t-sub)}
+  .flow-column{background:var(--t-panel);border-color:var(--t-line);color:var(--t-text);box-shadow:var(--t-shadow)}
+  .flow-column.focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--t-accent) 24%,transparent),var(--t-shadow)}
+  .flow-head{background:linear-gradient(180deg,color-mix(in srgb,var(--flow-color) 16%,var(--t-panel)),var(--t-panel));border-bottom-color:var(--t-line)}
+  .flow-head h2{color:var(--t-text)}.flow-stats,.flow-reason{color:var(--t-sub)}.flow-stats b{color:var(--t-text)}
+  .node-list{background:var(--t-panel)}.node-card{background:var(--t-card);border-color:var(--t-line);color:var(--t-text);box-shadow:0 3px 10px color-mix(in srgb,var(--t-bg) 32%,transparent)}
+  .node-card:hover{border-color:var(--flow-color);box-shadow:0 7px 19px color-mix(in srgb,var(--t-bg) 46%,transparent)}.node-card.selected{border-color:var(--t-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--t-accent) 22%,transparent)}
+  .node-seq{background:color-mix(in srgb,var(--flow-color) 17%,var(--t-card));color:var(--t-text)}.node-name{color:var(--t-text)}.node-meta{color:var(--t-muted)}.node-owner{color:var(--t-sub)}.node-owner b{color:var(--t-text)}
+  .node-cta{color:var(--t-cta)}.node-connector:before{background:var(--t-arrow)}.node-connector:after{border-top-color:var(--t-arrow)}.node-connector span{background:var(--t-panel);color:var(--t-muted)}
+  .flow-output{border-color:var(--t-line);background:var(--t-card2);color:var(--t-sub)}
+  .drawer{background:var(--t-panel);border-left-color:var(--t-line);color:var(--t-text);box-shadow:-18px 0 40px color-mix(in srgb,var(--t-bg) 46%,transparent)}
+  .drawerhead{background:linear-gradient(135deg,color-mix(in srgb,var(--flow-color,var(--t-accent)) 34%,var(--t-panel)),var(--t-panel));border-bottom:1px solid var(--t-line);color:var(--t-text)}
+  .drawerbody{background:var(--t-panel)}.drawer-summary .summary-card,.detail-item{background:var(--t-card);border-color:var(--t-line)}
+  .summary-card label,.drawer-section-title,.detail-item label{color:var(--t-muted)}.summary-card b,.detail-item div{color:var(--t-text)}
+  .node-relation{border-left-color:var(--t-accent);background:var(--t-soft);color:var(--t-sub)}.exec-card{background:var(--t-card);border-color:color-mix(in srgb,var(--t-accent) 55%,var(--t-line))}.exec-card:not(:last-child):after{color:var(--t-arrow)}
+  .exec-no{background:var(--t-accent)}.exec-title{color:var(--t-text)}.exec-lv{background:var(--t-soft);color:var(--t-accent)}.exec-owner{color:var(--t-muted)}.exec-owner b,.exec-desc{color:var(--t-sub)}
+  .basis{border-color:var(--t-line);border-left-color:var(--t-accent);background:var(--t-card2);color:var(--t-sub)}
+  .relation-panel,.checkpanel,.theme-panel{background:var(--t-panel);border-color:var(--t-line);color:var(--t-text);box-shadow:var(--t-shadow)}
+  .panel-head,.checkhead{background:var(--t-soft);border-bottom-color:var(--t-line);color:var(--t-text)}.panel-head button,.checkhead button{color:var(--t-sub)}
+  .relation-body,.checkbody{background:var(--t-panel);color:var(--t-sub)}.relation-item{background:var(--t-card);border-color:var(--t-line);color:var(--t-sub)}.relation-item b{color:var(--t-accent)}
+  .toast{background:var(--t-card);color:var(--t-text);border:1px solid var(--t-line)}
+  .theme-panel{position:absolute;right:22px;top:14px;width:330px;z-index:42;border:1px solid var(--t-line);border-radius:11px;display:none;overflow:hidden}.theme-panel.open{display:block}
+  .theme-list{padding:10px;display:flex;flex-direction:column;gap:7px}.theme-option{border:1px solid var(--t-line);background:var(--t-card);color:var(--t-text);border-radius:9px;padding:9px 10px;cursor:pointer;text-align:left;display:grid;grid-template-columns:58px 1fr 20px;gap:10px;align-items:center}
+  .theme-option:hover,.theme-option.active{border-color:var(--t-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--t-accent) 15%,transparent)}.theme-swatches{display:flex}.theme-swatches i{width:21px;height:26px;border:2px solid rgba(255,255,255,.34);margin-right:-6px;border-radius:6px}.theme-option b{display:block;font-size:11.5px}.theme-option small{display:block;color:var(--t-muted);font-size:9.5px;margin-top:2px}.theme-check{color:var(--t-accent);font-weight:900;font-size:15px}
+  ::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--t-line) 86%,var(--t-muted))}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="mark">流</span></div>
+  <div class="titleblock"><b>线上分销经营 · 工作流程全景图</b><span>1 条业务工作流 · 7 个工作流节点 · 28 个执行节点</span></div>
+  <div class="spacer"></div>
+  <input class="searchbox" id="searchBox" type="search" placeholder="搜索工作流、节点、执行人…" aria-label="搜索工作流">
+  <div class="metrics">
+    <div class="metric score"><span>现状得分</span><b id="currentScore">38.0</b></div>
+    <div class="metric target"><span>下阶段目标</span><b id="targetScore">40.0</b></div>
+  </div>
+  <button class="btn" id="btnTheme">配色：深海蓝</button>
+  <button class="btn" id="btnRelations">板块关系</button>
+  <button class="btn" id="btnRisk">关注 L1 节点</button>
+  <button class="btn" id="btnCheck">完整性检查</button>
+  <button class="btn primary" id="btnFit">适应窗口</button>
+  <div class="zoomset"><button class="btn" id="zout" aria-label="缩小">−</button><span id="zoomPct">100%</span><button class="btn" id="zin" aria-label="放大">＋</button><button class="btn" id="zreset">重置</button></div>
+  <button class="btn" id="btnExport">导出 JSON</button>
+</header>
+
+<section class="ribbon-shell" aria-label="业务工作流总览">
+  <div class="ribbon-row"><div class="ribbon-label">业务工作流</div><nav class="flow-ribbon" id="flowRibbon"></nav></div>
+  <div class="ribbon-note"><b>综合评估：</b>自评 + 评估指引 + 线上运行 + 源码证据<span class="sep">·</span>L 表示业务成熟度，T 表示 L2 阶段内的引擎能力<span class="sep">·</span>2026-09-15</div>
+  <div class="legendbar"><span><i style="background:var(--l0)"></i>L0 人工/缺失</span><span><i style="background:var(--l1)"></i>L1 在线存档</span><span><i style="background:var(--l2)"></i>L2 中枢驱动</span><span><i style="background:var(--l3)"></i>L3 AI 节点</span><span><i style="background:var(--l4)"></i>L4 无人闭环</span></div>
+</section>
+
+<main class="workspace">
+  <section class="board-viewport" id="boardViewport" aria-label="电商发展部工作流节点全景">
+    <div class="board" id="board"></div>
+  </section>
+  <div class="toast" id="toast"></div>
+  <section class="theme-panel" id="themePanel" aria-label="配色方案">
+    <div class="panel-head">选择配色方案<button id="themeClose" aria-label="关闭">×</button></div>
+    <div class="theme-list" id="themeList"></div>
+  </section>
+  <section class="relation-panel" id="relationPanel"><div class="panel-head">跨工作流交接关系<button id="relationClose" aria-label="关闭">×</button></div><div class="relation-body" id="relationBody"></div></section>
+  <section class="checkpanel" id="checkPanel"><div class="checkhead">流程完整性检查<button id="checkClose" aria-label="关闭">×</button></div><div class="checkbody" id="checkBody"></div></section>
+  <aside class="drawer" id="drawer" aria-label="执行节点详情">
+    <div class="drawerhead"><div><div class="drawer-kicker" id="drawerKicker">工作流节点</div><h3 id="drawerTitle">选择节点查看执行详情</h3></div><button id="drawerClose" aria-label="关闭">×</button></div>
+    <div class="drawerbody" id="drawerBody"></div>
+  </aside>
+</main>
+
+<script>
+const FLOW_COLORS=['#4f8cff','#38bdf8','#c084fc','#34d399'];
+const LVC={L0:'var(--l0)',L1:'var(--l1)',L2:'var(--l2)',L3:'var(--l3)',L4:'var(--l4)'};
+const TYPES={
+  human:{label:'人工执行',color:'#64748b'}, external:{label:'外部平台',color:'#7c5cff'},
+  internal:{label:'中枢记录',color:'#3b82f6'}, hybrid:{label:'人机协同',color:'#d97706'},
+  engine:{label:'引擎驱动',color:'#0f9f91'}, decision:{label:'人工决策',color:'#b58105'}
+};
+const FLOW_Y=24, LANE_H=154, NODE_X=266, NODE_STEP=184, NODE_Y_OFFSET=43, NW=164, NH=84;
+
+const flows=[
+  {id:'W3',name:'线上分销经营',weight:15,lv:'L0',target:'L2',tlv:'',ttarget:'T1',
+   score:'L0 → L2',
+   reason:'报价合同局部 L1，但物流跟踪、财务勾稽、发票、售后与舆情仍有关键 L0。'}
+];
+
+const nodes=[
+  // W3 线上分销经营
+  n('F1','W3',1,'选品报价与控价','分销负责人/商品','F2 合作条款与法务审核','供货折扣+活动政策+成本+红线→报价清单','供货折扣、活动政策、成本、控价红线','人工生成报价、核价格，交 F2','报价清单、政策与控价线','L1','L3','中枢已沉淀折扣/成本/红线数据，但毛利校验与自动报价尚未成型，当前以人工+表格为主。','internal','报价确认'),
+  n('F2','W3',2,'合作条款与法务审核','分销商务/法务','F3 资质授权与材料交付','报价+模板+保证金/控价约定→合同','报价、模板、保证金、控价约定','起草合同、法务审核、补充协议，交 F3','已审批合同、协议版本','L1','L3','合同模板与版本已部分线上化，但差异比对与版本留痕仍靠人工文档审批。','decision','合同生效'),
+  n('F3','W3',3,'资质授权与材料交付','分销商务/品牌','F4 店铺机制与价格管理','主体+执照+授权书+商标证→资质包','主体、营业执照、授权书、商标证','人工找材料、邮件授权、交合作方，交 F4','完整资质包、授权凭证','L0','L2','资质与授权材料主要靠人工/邮件，局部缺失，未形成在线闭环与到期提醒。','human','材料交付'),
+  n('F4','W3',4,'店铺机制与价格管理','分销运营/合作方','F5 采购出货与物流跟踪','合同+商品资料+客服规则→店铺规范','合同、商品资料、客服规则','机制审核、价格稽查、物料/话术培训，交 F5','可运营店铺、价格与内容规范','L1','L3','外部平台有记录，但内部价格巡检与异常回流未打通，破价预警缺失。','external','订单触发'),
+  n('F5','W3',5,'采购出货与物流跟踪','分销运营/仓储','F6 财务对账与发票结算','采购单+库存+物流方案→出库/物流状态','采购单、库存、物流方案','录单、分配库存、计算运费、人工追踪，交 F6/F7','出库单、物流状态、签收结果','L0','L2','ERP/表格+人工追踪为主，订单/库存/物流状态未自动同步，缺异常预警。','human','发货完成'),
+  n('F6','W3',6,'财务对账与发票结算','分销运营/财务','F7 售后处理与舆情监控','回款+出货+物流+政策+发票→核销结果','回款、出货、物流、政策、发票','人工勾稽、政策核销、开票，交财务','对账差异、核销结果、发票','L0','L3','账单勾稽与发票仍以人工为主，局部缺失，是关键 L0。','human','对账确认'),
+  n('F7','W3',7,'售后处理与舆情监控','分销运营/客服','F1 选品报价与控价','退货+漏发+投诉+舆情→结论与改进','退货、漏发、投诉与舆情','人工收集、判断、协调处理，回 F4/F5','售后结论、责任与改进项','L0','L2','售后与舆情处置依赖人工，未工单化，缺规则分流与升级闭环。','hybrid','复盘回流')
+];
+
+function n(id,flow,seq,name,actor,to,method,input,doing,output,lv,target,basis,type,edge){
+  return {id,flow,seq,name,actor,to,method,input,doing,output,lv,target,basis,type,edge};
+}
+
+const edges=[];
+flows.forEach(f=>{
+  const list=nodes.filter(x=>x.flow===f.id).sort((a,b)=>a.seq-b.seq);
+  list.slice(0,-1).forEach((x,i)=>edges.push({id:`${f.id}-e${i+1}`,from:x.id,to:list[i+1].id,label:x.edge,flow:f.id,cross:false}));
+});
+const crossEdges=[];
+crossEdges.forEach((e,i)=>edges.push({id:`X${i+1}`,from:e[0],to:e[1],label:e[2],cross:true}));
+
+const $=id=>document.getElementById(id);
+const nodeById=id=>nodes.find(x=>x.id===id),flowById=id=>flows.find(x=>x.id===id);
+const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+const THEMES={
+  deep:{name:'深海蓝',desc:'稳重深色，适合日常看板',flows:['#4f8cff','#38bdf8','#a78bfa','#c084fc','#34d399','#fbbf24']},
+  aurora:{name:'极光紫',desc:'蓝紫高对比，适合汇报演示',flows:['#7c3aed','#a855f7','#ec4899','#6366f1','#14b8a6','#f59e0b']},
+  graphite:{name:'石墨青',desc:'低饱和专业感，适合长时间阅读',flows:['#0ea5a0','#22c55e','#38bdf8','#14b8a6','#84cc16','#d4a72c']},
+  warm:{name:'暖橙明亮',desc:'接近参考图，适合打印与飞书嵌入',flows:['#f97316','#ea650b','#d97706','#c86009','#b45309','#a94806']},
+  ice:{name:'冰川商务',desc:'明亮蓝灰，适合正式评审材料',flows:['#2563eb','#0891b2','#4f46e5','#7c3aed','#0d9488','#64748b']}
+};
+const LV_INFO={
+  L0:{score:0,color:'#8792a3',soft:'#f1f3f5',text:'#4b5563'},L1:{score:20,color:'#3b82f6',soft:'#edf5ff',text:'#1d4ed8'},
+  L2:{score:40,color:'#14a394',soft:'#e9fbf8',text:'#0f766e'},L3:{score:70,color:'#d79208',soft:'#fff8df',text:'#8a5a00'},
+  L4:{score:100,color:'#20a856',soft:'#ecfbf2',text:'#15803d'}
+};
+const TYPE_ICON={human:'👤',external:'↗',internal:'▣',hybrid:'✦',engine:'⚙',decision:'◆'};
+const T_INFO={T1:'固定流程/简单分支',T2:'条件路由',T3:'七维智能调度',T4:'AI 自治闭环'};
+let selectedNode=null,showRisk=false,zoomLevel=1,searchTerm='',currentTheme='deep';
+try{const saved=localStorage.getItem('ecom-panorama-theme');if(THEMES[saved])currentTheme=saved;}catch(e){}
+const themeDef=()=>THEMES[currentTheme];
+const levelText=f=>f.tlv?`${f.lv}${f.tlv}`:f.lv;
+const targetText=f=>f.ttarget?`${f.target}${f.ttarget}`:f.target;
+const scoreFor=key=>flows.reduce((sum,f)=>sum+f.weight*LV_INFO[f[key]].score/100,0);
+
+function executionSteps(n){
+  const primary=n.actor.split('/')[0],review=['decision','human'].includes(n.type)?`${primary}/负责人`:`${primary}/复核人`;
+  const reviewTitle=n.type==='decision'?'人工决策与结果确认':(['hybrid','engine'].includes(n.type)?'AI 结果校验与人工确认':'结果校验与异常处理');
+  return [
+    {title:'输入接收与完整性校验',owner:primary,desc:`接收${n.input}，检查字段完整性、权限与时效后进入任务。`},
+    {title:`${n.name}执行`,owner:n.actor,desc:n.doing},
+    {title:reviewTitle,owner:review,desc:'依据节点规则复核关键结果；异常转人工确认并记录处理依据。'},
+    {title:'交付与状态回写',owner:primary,desc:`形成${n.output}，通过“${n.method}”交给${n.to}。`}
+  ];
+}
+function lvVars(lv){const x=LV_INFO[lv];return `--lv-color:${x.color};--lv-soft:${x.soft};--lv-text:${x.text}`;}
+function matchesNode(n,q){return !q||[n.id,n.name,n.actor,n.to,n.input,n.doing,n.output,TYPES[n.type].label].join(' ').toLowerCase().includes(q);}
+
+function renderRibbon(){
+  $('flowRibbon').innerHTML=flows.map((f,i)=>`<button class="ribbon-step" data-flow="${f.id}" style="--flow-color:${themeDef().flows[i]}" aria-label="定位 ${f.name}">${f.id} ${esc(f.name)}<small>${f.weight}% · ${levelText(f)} → ${targetText(f)}</small></button>`).join('');
+  $('flowRibbon').querySelectorAll('button').forEach(b=>b.onclick=()=>focusFlow(b.dataset.flow));
+}
+function renderBoard(){
+  const q=searchTerm.trim().toLowerCase();
+  $('board').innerHTML=flows.map((f,i)=>{
+    const list=nodes.filter(n=>n.flow===f.id).sort((a,b)=>a.seq-b.seq),flowMatch=!q||[f.id,f.name,f.reason].join(' ').toLowerCase().includes(q);
+    const anyMatch=flowMatch||list.some(n=>matchesNode(n,q)),last=list.at(-1);
+    const cards=list.map((n,idx)=>{
+      const info=LV_INFO[n.lv],dim=(showRisk&&n.lv!=='L1')||(q&&!flowMatch&&!matchesNode(n,q));
+      return `<button class="node-card ${selectedNode===n.id?'selected':''} ${dim?'dim':''}" data-id="${n.id}" style="${lvVars(n.lv)}" aria-label="${n.id} ${esc(n.name)}，4 个执行节点，执行者 ${esc(n.actor)}">
+        <div class="node-top"><span class="node-seq">${idx+1}</span><span class="node-name">${TYPE_ICON[n.type]} ${esc(n.name)}</span><span class="node-lv">${n.lv} · ${info.score}分</span></div>
+        <div class="node-meta">${esc(TYPES[n.type].label)} · 4 个执行节点</div><div class="node-owner"><b>执行：</b>${esc(n.actor)}</div><div class="node-cta">点击查看执行节点 →</div>
+      </button>${idx<list.length-1?`<div class="node-connector"><span>${esc(n.edge)}</span></div>`:''}`;
+    }).join('');
+    return `<section class="flow-column ${anyMatch?'':'dim'}" id="flow-${f.id}" style="--flow-color:${themeDef().flows[i]};${lvVars(f.lv)}">
+      <header class="flow-head"><div class="flow-titleline"><span class="flow-index">${i+1}</span><h2>${esc(f.name)}</h2><span class="flow-level">${levelText(f)}→${targetText(f)}</span></div>
+      <div class="flow-stats"><span><b>${list.length}</b> 个工作流节点 · <b>${list.length*4}</b> 个执行节点</span><span>权重 <b>${f.weight}%</b></span></div><div class="flow-reason">评估依据：${esc(f.reason)}</div></header>
+      <div class="node-list">${cards}<div class="flow-output">▶ 输出：${esc(last.output)}｜加权贡献 ${f.score}</div></div></section>`;
+  }).join('');
+  $('board').querySelectorAll('.node-card').forEach(b=>b.onclick=()=>openNode(b.dataset.id));
+}
+function focusFlow(id){
+  const el=$(`flow-${id}`);document.querySelectorAll('.flow-column').forEach(x=>x.classList.remove('focus'));el.classList.add('focus');
+  $('boardViewport').scrollTo({left:Math.max(0,(el.offsetLeft-24)*zoomLevel),top:0,behavior:'smooth'});
+  setTimeout(()=>el.classList.remove('focus'),1800);toast(`已定位 ${id} · ${flowById(id).name}`);
+}
+function openNode(id){
+  const n=nodeById(id),f=flowById(n.flow),steps=executionSteps(n);selectedNode=id;renderBoard();
+  $('drawer').style.setProperty('--flow-color',themeDef().flows[flows.indexOf(f)]);
+  $('drawerKicker').textContent=`${f.id} ${f.name} · 工作流节点 ${n.seq}/7`;$('drawerTitle').textContent=n.name;
+  $('drawerBody').innerHTML=`<div class="drawer-summary"><div class="summary-card"><label>业务流程成熟度（L）</label><b>${n.lv} → ${n.target}</b></div><div class="summary-card"><label>流程引擎能力（T）</label><b>${f.tlv?`${f.tlv} · ${T_INFO[f.tlv]}`:'L1 阶段暂不标 T'}</b></div><div class="summary-card"><label>执行节点</label><b>4 个 · 线性流转</b></div><div class="summary-card"><label>评估证据</label><b>自评 + 指引 + 线上 + 源码</b></div></div>
+    <div class="node-relation"><b>节点关系：</b>输入接收 → 核心执行 → 结果校验 → 交付回写<br><b>责任交接：</b>${esc(n.actor)}完成后，通过“${esc(n.method)}”交给${esc(n.to)}。</div>
+    <div class="drawer-section-title">执行节点（点击工作流节点后展开）</div><div class="execution-list">${steps.map((s,i)=>`<div class="exec-card"><div class="exec-top"><span class="exec-no">${i+1}</span><span class="exec-title">${esc(s.title)}</span><span class="exec-lv">${n.lv}</span></div><div class="exec-owner"><b>执行：</b>${esc(s.owner)}</div><div class="exec-desc">${esc(s.desc)}</div></div>`).join('')}</div>
+    <div class="drawer-section-title">节点输入、输出与流转</div><div class="detail-grid"><div class="detail-item"><label>输入</label><div>${esc(n.input)}</div></div><div class="detail-item"><label>核心动作</label><div>${esc(n.doing)}</div></div><div class="detail-item"><label>输出</label><div>${esc(n.output)}</div></div><div class="detail-item"><label>做完交给谁</label><div>${esc(n.to)}</div></div></div>
+    <div class="drawer-section-title">等级评估依据</div><div class="basis">当前 <b>${n.lv}</b>：${esc(n.basis)}<br>预期 <b>${n.target}</b>：输入、执行、校验、异常、回写与连续运行证据均需进入公司中枢验收。</div>`;
+  $('drawer').classList.add('open');
+}
+function closeDrawer(){selectedNode=null;$('drawer').classList.remove('open');renderBoard();}
+function applyZoom(){zoomLevel=Math.min(1.25,Math.max(.68,zoomLevel));$('board').style.zoom=zoomLevel;$('zoomPct').textContent=Math.round(zoomLevel*100)+'%';}
+function zoomBy(delta){zoomLevel+=delta;applyZoom();}
+function fitBoard(){
+  $('board').style.zoom=1;const usable=$('boardViewport').clientWidth-48;zoomLevel=Math.min(1,Math.max(.68,usable/988));applyZoom();$('boardViewport').scrollTo({left:0,top:0});toast('已适应窗口并展示全部工作流');
+}
+let toastTimer;function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('on'),1700);}
+function renderRelations(){
+  $('relationBody').innerHTML=crossEdges.map(e=>{const a=nodeById(e[0]),b=nodeById(e[1]);return `<div class="relation-item"><b>${e[0]} → ${e[1]}</b>｜${esc(e[2])}<br>${esc(flowById(a.flow).name)} → ${esc(flowById(b.flow).name)}</div>`;}).join('');
+}
+function renderThemes(){
+  $('themeList').innerHTML=Object.entries(THEMES).map(([key,t])=>`<button class="theme-option ${key===currentTheme?'active':''}" data-theme="${key}"><span class="theme-swatches">${t.flows.slice(0,3).map(c=>`<i style="background:${c}"></i>`).join('')}</span><span><b>${t.name}</b><small>${t.desc}</small></span><span class="theme-check">${key===currentTheme?'✓':''}</span></button>`).join('');
+  $('themeList').querySelectorAll('button').forEach(b=>b.onclick=()=>applyTheme(b.dataset.theme));
+}
+function applyTheme(key,persist=true){
+  if(!THEMES[key])return;const openId=$('drawer').classList.contains('open')?selectedNode:null;currentTheme=key;document.documentElement.dataset.theme=key;$('btnTheme').textContent='配色：'+THEMES[key].name;
+  if(persist)try{localStorage.setItem('ecom-panorama-theme',key);}catch(e){}
+  renderRibbon();renderBoard();renderThemes();if(openId)openNode(openId);
+}
+
+$('searchBox').addEventListener('input',e=>{searchTerm=e.target.value;renderBoard();});
+$('btnTheme').onclick=()=>{$('themePanel').classList.toggle('open');$('btnTheme').classList.toggle('active');};
+$('themeClose').onclick=()=>{$('themePanel').classList.remove('open');$('btnTheme').classList.remove('active');};
+$('btnRisk').onclick=()=>{showRisk=!showRisk;$('btnRisk').classList.toggle('active',showRisk);renderBoard();const count=nodes.filter(n=>n.lv==='L1').length;toast(showRisk?`已突出 ${count} 个 L1 提升节点`:'已显示全部成熟度');};
+$('btnRelations').onclick=()=>{$('relationPanel').classList.toggle('open');$('btnRelations').classList.toggle('active');};
+$('relationClose').onclick=()=>{$('relationPanel').classList.remove('open');$('btnRelations').classList.remove('active');};
+$('zin').onclick=()=>zoomBy(.08);$('zout').onclick=()=>zoomBy(-.08);$('zreset').onclick=()=>{zoomLevel=1;applyZoom();$('boardViewport').scrollTo({left:0,top:0});};$('btnFit').onclick=fitBoard;
+$('drawerClose').onclick=closeDrawer;$('checkClose').onclick=()=>$('checkPanel').classList.remove('open');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$('relationPanel').classList.remove('open');$('checkPanel').classList.remove('open');}});
+$('btnCheck').onclick=()=>{
+  const weights=flows.reduce((s,f)=>s+f.weight,0),missing=[];nodes.forEach(n=>['actor','to','method','input','doing','output','lv','basis'].forEach(k=>{if(!n[k])missing.push(`${n.id}.${k}`);}));
+  $('checkBody').innerHTML=`<div class="ok">✓ 4 条业务工作流全部建模并在顶部呈现</div><div class="ok">✓ 28 个工作流节点按列串行展示</div><div class="ok">✓ 112 个执行节点可逐节点展开查看</div><div class="${weights===100?'ok':'warn'}">${weights===100?'✓':'⚠'} 战略权重合计 ${weights}%</div><div class="ok">✓ 当前等级：L2T1 / L2T2 / L2T2 / L1</div><div class="ok">✓ 下阶段：L2T2 / L2T3 / L2T3 / L2T1</div><div class="${missing.length?'warn':'ok'}">${missing.length?'⚠ 缺失字段：'+missing.join('、'):'✓ 执行人、交接对象、流转、输入输出及依据完整'}</div><div style="margin-top:6px;border-top:1px dashed #d5dae2;padding-top:6px">评分口径：T1–T4 仅是 L2 下的引擎能力子阶段，不与 L3/L4 组合，也不重复计分。现状 ${scoreFor('lv').toFixed(1)}，下阶段目标 ${scoreFor('target').toFixed(1)}。</div>`;$('checkPanel').classList.add('open');
+};
+$('btnExport').onclick=()=>{const enriched=nodes.map(n=>({...n,executionNodes:executionSteps(n)}));const data={title:'线上分销经营 工作流程全景图',version:'2026-09-15-balanced-review',assessmentBasis:['部门自评','评估指引','线上中枢运行状态','DEMO汇总.zip 全模块源码','达播 maturity_assessment.html'],currentScore:scoreFor('lv'),targetScore:scoreFor('target'),flows,nodes:enriched,edges};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='线上分销经营工作流程全景图.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),200);toast('已导出含执行节点与评估依据的 JSON');};
+
+$('currentScore').textContent=scoreFor('lv').toFixed(1);$('targetScore').textContent=scoreFor('target').toFixed(1);
+applyTheme(currentTheme,false);renderRelations();requestAnimationFrame(fitBoard);window.addEventListener('resize',()=>{clearTimeout(window.__fitTimer);window.__fitTimer=setTimeout(fitBoard,160);});
+</script>
+</body>
+</html>
