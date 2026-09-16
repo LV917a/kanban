@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分销工作台中枢 · 面板</title>
+<style>
+  :root{
+    --bg:#090d14; --panel:#111722; --panel2:#161e2c; --panel3:#1b2535;
+    --line:#2d3b54; --line2:#435574; --ink:#f8fafc; --sub:#d9e2ef; --mute:#b5c2d3;
+    --primary:#4f8cff; --ok:#22c55e; --warn:#fbbf24; --danger:#fb7185;
+    --l0:#6b7280; --l1:#60a5fa; --l2:#2dd4bf; --l3:#fbbf24; --l4:#22c55e;
+    --shadow:0 4px 14px rgba(0,0,0,.36),0 18px 48px rgba(0,0,0,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:radial-gradient(1200px 600px at 12% -10%,#16213a 0%,transparent 60%),
+               radial-gradient(1000px 560px at 110% 10%,#1a1430 0%,transparent 55%),var(--bg);
+    color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
+    font-size:13px;min-height:100vh;display:flex;flex-direction:column;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar{
+    height:60px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;border-bottom:1px solid var(--line);background:rgba(17,23,34,.9);
+    backdrop-filter:blur(8px);flex-shrink:0;
+  }
+  .topbar .brand{display:flex;align-items:center;gap:12px}
+  .topbar .logo{
+    width:30px;height:30px;border-radius:9px;
+    background:linear-gradient(135deg,#4f8cff,#c084fc 60%,#fb7185);
+    box-shadow:0 0 18px rgba(79,140,255,.5);
+  }
+  .topbar h1{font-size:16px;font-weight:600;letter-spacing:.4px}
+  .topbar .sub{font-size:12px;color:var(--mute);margin-top:1px}
+  .topbar .meta{display:flex;gap:22px;align-items:center}
+  .topbar .meta .m{text-align:right}
+  .topbar .meta .m b{font-size:18px;font-weight:700;display:block;line-height:1}
+  .topbar .meta .m span{font-size:11px;color:var(--mute)}
+
+  /* ---------- 主体 ---------- */
+  .main{flex:1;display:flex;min-height:0}
+
+  /* 左侧导航 */
+  .sidebar{
+    width:296px;flex-shrink:0;border-right:1px solid var(--line);
+    background:rgba(17,23,34,.55);padding:16px 14px;overflow-y:auto;
+  }
+  .sidebar .title{font-size:11px;letter-spacing:2px;color:var(--mute);
+    text-transform:uppercase;margin:2px 0 12px 4px}
+  .seg{
+    position:relative;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel2);padding:14px 14px 14px 18px;margin-bottom:12px;
+    cursor:pointer;transition:.2s;overflow:hidden;
+  }
+  .seg::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:var(--c);box-shadow:0 0 14px var(--c);
+  }
+  .seg:hover{background:var(--panel3);transform:translateX(2px)}
+  .seg.on{background:var(--panel3);border-color:var(--c);
+    box-shadow:0 0 0 1px var(--c) inset,0 6px 20px rgba(0,0,0,.4)}
+  .seg .row1{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .seg .seq{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:12px;
+    border:1px solid var(--c);color:var(--c);background:rgba(255,255,255,.03);
+  }
+  .seg .name{font-size:14px;font-weight:600;color:var(--ink)}
+  .seg .ncount{margin-left:auto;font-size:11px;color:var(--c);
+    border:1px solid var(--c);border-radius:999px;padding:1px 8px}
+  .seg .desc{font-size:11.5px;color:var(--mute);line-height:1.55;margin-bottom:8px}
+  .seg .lvrow{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--sub)}
+  .badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;
+    padding:2px 7px;font-size:11px;font-weight:600;border:1px solid transparent}
+  .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+
+  /* 右侧面板 */
+  .panel{flex:1;min-width:0;overflow-y:auto;padding:18px 22px 40px}
+  .phead{
+    display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;
+    border:1px solid var(--line);background:linear-gradient(90deg,var(--panel2),var(--panel));
+    margin-bottom:16px;position:relative;overflow:hidden;
+  }
+  .phead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:var(--c);box-shadow:0 0 20px var(--c)}
+  .phead .pt{font-size:17px;font-weight:700}
+  .phead .pd{font-size:12px;color:var(--mute);margin-top:3px}
+  .phead .pstats{margin-left:auto;display:flex;gap:20px;text-align:right}
+  .phead .pstats .s b{font-size:16px;color:var(--c);display:block}
+  .phead .pstats .s span{font-size:11px;color:var(--mute)}
+
+  /* 交接条 */
+  .handoff{
+    display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;
+  }
+  .hchip{
+    font-size:11.5px;color:var(--sub);border:1px dashed var(--line2);
+    border-radius:8px;padding:6px 12px;background:rgba(27,37,53,.5);
+  }
+  .hchip b{color:var(--ink)}
+
+  /* 节点卡 */
+  .nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+  .node{
+    border:1px solid var(--line);border-radius:13px;background:var(--panel2);
+    overflow:hidden;transition:.2s;display:flex;flex-direction:column;
+  }
+  .node:hover{border-color:var(--line2);box-shadow:var(--shadow);transform:translateY(-2px)}
+  .node .nh{display:flex;align-items:center;gap:10px;padding:13px 15px;
+    border-bottom:1px solid var(--line);background:rgba(27,37,53,.5)}
+  .node .code{
+    font-size:11px;font-weight:700;color:#0b0f16;background:var(--c);
+    border-radius:6px;padding:2px 8px;letter-spacing:.5px;
+  }
+  .node .nn{font-size:14px;font-weight:600}
+  .node .nlv{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .node .nb{padding:13px 15px;display:flex;flex-direction:column;gap:11px}
+  .fld{display:flex;flex-direction:column;gap:5px}
+  .fld .k{font-size:11px;color:var(--mute);letter-spacing:.5px;display:flex;align-items:center;gap:5px}
+  .fld .v{font-size:12.5px;color:var(--sub);line-height:1.6}
+  .oplist{display:flex;flex-direction:column;gap:6px}
+  .op{
+    display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--sub);
+    line-height:1.5;padding:6px 10px;border-radius:8px;background:rgba(11,15,22,.45);
+    border-left:2px solid var(--c);
+  }
+  .op i{font-style:normal;color:var(--c);font-weight:700;flex-shrink:0;font-size:11px}
+  .pain{
+    font-size:11.5px;color:#fbbf24;line-height:1.55;
+    background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);
+    border-radius:8px;padding:8px 10px;
+  }
+  .actor{font-size:11.5px;color:var(--mute)}
+
+  /* 滚动条 */
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:#2d3b54;border-radius:6px}
+  ::-webkit-scrollbar-thumb:hover{background:#435574}
+  ::-webkit-scrollbar-track{background:transparent}
+
+  @media(max-width:900px){
+    .main{flex-direction:column}
+    .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--line);
+      display:flex;gap:10px;overflow-x:auto;padding:12px}
+    .seg{min-width:230px;margin-bottom:0}
+    .sidebar .title{display:none}
+    .nodes{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>分销工作台中枢</h1>
+        <div class="sub">线上分销经营 · 3 大聚合板块 · 操作台视图</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="m"><b>3</b><span>业务板块</span></div>
+      <div class="m"><b>7</b><span>分支节点</span></div>
+      <div class="m"><b>28</b><span>执行节点</span></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <aside class="sidebar" id="sidebar">
+      <div class="title">业务板块</div>
+      <!-- 板块卡由 JS 注入 -->
+    </aside>
+
+    <section class="panel">
+      <div class="phead" id="phead"></div>
+      <div class="handoff" id="handoff"></div>
+      <div class="nodes" id="nodes"></div>
+    </section>
+  </div>
+
+<script>
+const SEGMENTS = [{"id": "C", "seq": "①", "name": "合同审核类", "color": "#4f8cff", "desc": "选品报价与合同条款审核，输出可执行的合作依据", "lv": "L1", "target": "L3", "nodes": [{"code": "F1", "name": "选品报价与控价校验", "actor": "分销负责人 / 商品", "lv": "L1", "target": "L3", "type": "中枢🟡 + 人工👤", "input": "供货折扣、活动政策、成本、控价红线", "ops": ["生成选品报价单", "核算毛利与控价红线", "维护折扣/成本/红线参数", "提交至 F2 合同环节"], "output": "报价清单、政策与控价线", "pain": "毛利校验与自动报价尚未成型，当前以人工 + 表格为主"}, {"code": "F2", "name": "合作条款与法务审核", "actor": "分销商务 / 法务", "lv": "L1", "target": "L3", "type": "人工👤 + 文档/审批", "input": "报价、模板、保证金、控价约定", "ops": ["套用合同模板起草", "条款差异比对", "法务审核与补充协议", "协议版本留痕归档"], "output": "已审批合同、协议版本", "pain": "差异比对与版本留痕仍靠人工文档审批"}]}, {"id": "P", "seq": "②", "name": "履约执行类", "color": "#c084fc", "desc": "资质授权、店铺机制、采购物流的落地执行", "lv": "L1", "target": "L3", "nodes": [{"code": "F3", "name": "资质授权与材料交付", "actor": "分销商务 / 品牌", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "主体、营业执照、授权书、商标证", "ops": ["调取主体资质材料", "生成授权书", "交付合作方并留档", "资质到期提醒"], "output": "完整资质包、授权凭证", "pain": "资质/授权靠人工邮件，未形成在线闭环与到期提醒"}, {"code": "F4", "name": "店铺机制与价格管理", "actor": "分销运营 / 合作方", "lv": "L1", "target": "L3", "type": "外部🔶 + 人工👤", "input": "合同、商品资料、客服规则", "ops": ["店铺机制审核", "价格稽查与巡店", "物料/话术培训", "破价预警处置"], "output": "可运营店铺、价格与内容规范", "pain": "内部价格巡检与异常回流未打通，破价预警缺失"}, {"code": "F5", "name": "采购出货与物流跟踪", "actor": "分销运营 / 仓储", "lv": "L0", "target": "L2", "type": "ERP/表格 + 人工👤", "input": "采购单、库存、物流方案", "ops": ["采购录单", "分配库存", "计算运费与发货", "物流追踪与签收回传"], "output": "出库单、物流状态、签收结果", "pain": "订单/库存/物流状态未自动同步，缺异常预警"}]}, {"id": "S", "seq": "③", "name": "财务对账类", "color": "#fb7185", "desc": "回款对账、发票核销与售后舆情闭环", "lv": "L0", "target": "L2", "nodes": [{"code": "F6", "name": "财务对账与发票结算", "actor": "分销运营 / 财务", "lv": "L0", "target": "L3", "type": "人工👤 / 缺失🈳", "input": "回款、出货、物流、政策、发票", "ops": ["账单勾稽核对", "政策核销", "开具发票", "对账差异分级"], "output": "对账差异、核销结果、发票", "pain": "账单勾稽与发票仍以人工为主，是关键 L0"}, {"code": "F7", "name": "售后处理与舆情监控", "actor": "分销运营 / 客服", "lv": "L0", "target": "L2", "type": "人工👤 / 缺失🈳", "input": "退货、漏发、投诉与舆情", "ops": ["售后工单登记", "规则分流派单", "舆情监控与摘要", "升级处理与复盘回流"], "output": "售后结论、责任与改进项", "pain": "售后与舆情处置依赖人工，未工单化，缺规则分流与升级闭环"}]}];
+const HANDOFFS = [["合同审核类", "履约执行类", "合同生效 → 材料交付"], ["履约执行类", "财务对账类", "发货完成 → 对账确认"], ["财务对账类", "合同审核类", "复盘回流 → 报价确认"]];
+const LVC = {"L0": "#6b7280", "L1": "#60a5fa", "L2": "#2dd4bf", "L3": "#fbbf24", "L4": "#22c55e"};
+
+let cur = 0;
+
+function lvBadge(lv){
+  return `<span class="badge" style="color:${LVC[lv]};border-color:${LVC[lv]};background:${LVC[lv]}1a">
+    <span class="dot" style="background:${LVC[lv]}"></span>${lv}</span>`;
+}
+
+function renderSidebar(){
+  const box = document.getElementById('sidebar');
+  box.innerHTML = '<div class="title">业务板块</div>' + SEGMENTS.map((s,i)=>`
+    <div class="seg ${i===cur?'on':''}" style="--c:${s.color}" onclick="select(${i})">
+      <div class="row1">
+        <div class="seq">${s.seq}</div>
+        <div class="name">${s.name}</div>
+        <div class="ncount">${s.nodes.length} 节点</div>
+      </div>
+      <div class="desc">${s.desc}</div>
+      <div class="lvrow">
+        ${lvBadge(s.lv)} <span>→</span> ${lvBadge(s.target)}
+      </div>
+    </div>`).join('');
+}
+
+function renderPanel(){
+  const s = SEGMENTS[cur];
+  document.getElementById('phead').style.setProperty('--c', s.color);
+  document.getElementById('phead').innerHTML = `
+    <div>
+      <div class="pt">${s.seq} ${s.name}</div>
+      <div class="pd">${s.desc}</div>
+    </div>
+    <div class="pstats">
+      <div class="s"><b>${s.nodes.length}</b><span>分支节点</span></div>
+      <div class="s"><b>${s.lv} → ${s.target}</b><span>当前 → 目标</span></div>
+    </div>`;
+
+  // 交接条（只显示与本板块相关的）
+  document.getElementById('handoff').innerHTML = HANDOFFS.map(h=>{
+    const rel = h[0]===s.name || h[1]===s.name;
+    return `<div class="hchip" style="${rel?'border-color:'+s.color+';color:var(--ink)':''}">
+      <b>${h[0]}</b> → <b>${h[1]}</b> · ${h[2]}</div>`;
+  }).join('');
+
+  document.getElementById('nodes').innerHTML = s.nodes.map(n=>`
+    <div class="node" style="--c:${s.color}">
+      <div class="nh">
+        <span class="code">${n.code}</span>
+        <span class="nn">${n.name}</span>
+        <span class="nlv">${lvBadge(n.lv)}<span style="color:var(--mute)">→</span>${lvBadge(n.target)}</span>
+      </div>
+      <div class="nb">
+        <div class="fld"><div class="k">👤 执行者 / 载体</div><div class="v">${n.actor} · ${n.type}</div></div>
+        <div class="fld"><div class="k">📥 输入</div><div class="v">${n.input}</div></div>
+        <div class="fld">
+          <div class="k">🛠️ 操作内容</div>
+          <div class="oplist">${n.ops.map((o,i)=>`<div class="op"><i>${i+1}</i><span>${o}</span></div>`).join('')}</div>
+        </div>
+        <div class="fld"><div class="k">📤 输出</div><div class="v">${n.output}</div></div>
+        <div class="pain">⚠ 当前痛点：${n.pain}</div>
+      </div>
+    </div>`).join('');
+}
+
+function select(i){
+  cur = i;
+  renderSidebar();
+  renderPanel();
+  document.querySelector('.panel').scrollTop = 0;
+}
+
+renderSidebar();
+renderPanel();
+</script>
+</body>
+</html>
