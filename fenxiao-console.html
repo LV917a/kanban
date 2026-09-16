@@ -455,11 +455,11 @@ const BI_DATA = {"months": ["1月", "2月", "3月", "4月", "5月", "6月", "7�
   <aside class="sidebar" aria-label="全局导航">
     <div class="sidebar-brand">
       <div class="brand-logo" aria-hidden="true">分</div>
-      <div class="brand-text"><b>分销操作台</b><span>电商发展部 · 线上分销</span></div>
+      <div class="brand-text"><b>分销操作台</b></div>
     </div>
     <nav class="nav-scroll" aria-label="业务模块">
       <button type="button" class="nav-home" id="nav-home" aria-current="page" onclick="showHome()">
-        <span class="ico" aria-hidden="true">⚡</span><span>行动中心</span>
+        <span class="ico" aria-hidden="true">⚡</span><span>流程中心</span>
       </button>
       <div class="nav-group" role="group" aria-label="分销数据总览">
   <div class="nav-group-title">分销数据总览<span class="nav-group-count">2</span></div>
@@ -496,7 +496,6 @@ const BI_DATA = {"months": ["1月", "2月", "3月", "4月", "5月", "6月", "7�
       <div class="head-row">
         <div class="head-main">
           <div class="crumb"><a href="https://lv917a.github.io/kanban/" target="_blank" rel="noopener">分销工作门户</a><span aria-hidden="true">/</span><span>分销操作台</span></div>
-          <div class="eyebrow">电商发展部 · 线上分销</div>
           <h1 class="page-title" id="main-title">分销操作台 · 团队工作台</h1>
           <div class="page-context" id="main-sub">数据截至 2026-09-16 24:00 ｜ 覆盖 2026 年 1–12 月 ｜ 来源：分销业务数据看板</div>
         </div>
@@ -617,169 +616,169 @@ const CUST_COLOR = {
 };
 const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function normName(s) {{ return String(s || '').replace(/\s+/g, ''); }}
+function normName(s) { return String(s || '').replace(/\s+/g, ''); }
 
 /* ---------- §9.2 图表 option 构建 ---------- */
-function buildChartOption(p) {{
+function buildChartOption(p) {
   const key = p.chart;
   if (!key || !BI_DATA) return null;
 
-  if (key === 'line') {{
+  if (key === 'line') {
     const months = BI_DATA.months || [];
     const all = BI_DATA.trend_series || [];
     if (!months.length || !all.length) return null;
     const want = ['河南-澄清', '郑州-景瑶', '上海-帝亚', '深圳-帕克', '总目标'];
     const picked = [];
-    want.forEach(function (w) {{
-      const hit = all.find(function (s) {{ return normName(s.name) === normName(w); }});
+    want.forEach(function (w) {
+      const hit = all.find(function (s) { return normName(s.name) === normName(w); });
       if (hit) picked.push(hit);
-    }});
+    });
     if (!picked.length) return null;
-    return {{
+    return {
       color: SERIES_COLORS,
-      tooltip: {{
-        trigger: 'axis', axisPointer: {{ type: 'cross' }},
-        valueFormatter: function (v) {{ return (v == null ? '—' : Number(v).toLocaleString('zh-CN')) + ' 万'; }}
-      }},
-      legend: {{ data: picked.map(function (s) {{ return s.name; }}), bottom: 0, icon: 'roundRect', itemWidth: 12, itemHeight: 8 }},
-      grid: {{ left: 12, right: 20, bottom: 44, top: 20, containLabel: true }},
-      xAxis: {{ type: 'category', boundaryGap: false, data: months,
-        axisLine: {{ lineStyle: {{ color: '#d9e5f5' }} }}, axisLabel: {{ color: '#7f8da1', fontSize: 11 }} }},
-      yAxis: {{ type: 'value', name: '万元', nameTextStyle: {{ color: '#7f8da1', fontSize: 11, padding: [0, 0, 0, -28] }},
-        axisLine: {{ show: false }}, axisTick: {{ show: false }},
-        splitLine: {{ lineStyle: {{ color: '#eef3fb' }} }},
-        axisLabel: {{ color: '#7f8da1', fontSize: 11 }} }},
-      series: picked.map(function (s) {{
+      tooltip: {
+        trigger: 'axis', axisPointer: { type: 'cross' },
+        valueFormatter: function (v) { return (v == null ? '—' : Number(v).toLocaleString('zh-CN')) + ' 万'; }
+      },
+      legend: { data: picked.map(function (s) { return s.name; }), bottom: 0, icon: 'roundRect', itemWidth: 12, itemHeight: 8 },
+      grid: { left: 12, right: 20, bottom: 44, top: 20, containLabel: true },
+      xAxis: { type: 'category', boundaryGap: false, data: months,
+        axisLine: { lineStyle: { color: '#d9e5f5' } }, axisLabel: { color: '#7f8da1', fontSize: 11 } },
+      yAxis: { type: 'value', name: '万元', nameTextStyle: { color: '#7f8da1', fontSize: 11, padding: [0, 0, 0, -28] },
+        axisLine: { show: false }, axisTick: { show: false },
+        splitLine: { lineStyle: { color: '#eef3fb' } },
+        axisLabel: { color: '#7f8da1', fontSize: 11 } },
+      series: picked.map(function (s) {
         const isTotal = normName(s.name) === '总目标';
-        return {{
+        return {
           name: s.name, type: 'line', smooth: true, showSymbol: true, symbolSize: 6,
-          lineStyle: {{ width: isTotal ? 3 : 2, type: isTotal ? 'dashed' : 'solid' }},
-          itemStyle: {{ color: CUST_COLOR[normName(s.name)] || '#4478cf' }},
-          data: (s.data || []).map(function (v) {{ return v == null ? null : +(v / 10000).toFixed(1); }})
-        }};
-      }})
-    }};
-  }}
+          lineStyle: { width: isTotal ? 3 : 2, type: isTotal ? 'dashed' : 'solid' },
+          itemStyle: { color: CUST_COLOR[normName(s.name)] || '#4478cf' },
+          data: (s.data || []).map(function (v) { return v == null ? null : +(v / 10000).toFixed(1); })
+        };
+      })
+    };
+  }
 
-  if (key === 'pie') {{
+  if (key === 'pie') {
     const pie = BI_DATA.brand_pie || [];
     if (!pie.length) return null;
-    const total = pie.reduce(function (a, b) {{ return a + (b.value || 0); }}, 0);
-    return {{
+    const total = pie.reduce(function (a, b) { return a + (b.value || 0); }, 0);
+    return {
       color: SERIES_COLORS,
-      tooltip: {{
+      tooltip: {
         trigger: 'item',
-        formatter: function (x) {{
+        formatter: function (x) {
           return x.name + '<br/>' + Number(x.value).toLocaleString('zh-CN') + ' 元（' + x.percent + '%）';
-        }}
-      }},
-      legend: {{ orient: 'vertical', left: 0, top: 'center', icon: 'roundRect', itemWidth: 12, itemHeight: 8 }},
-      series: [{{
+        }
+      },
+      legend: { orient: 'vertical', left: 0, top: 'center', icon: 'roundRect', itemWidth: 12, itemHeight: 8 },
+      series: [{
         name: '品牌出货额', type: 'pie', radius: ['46%', '72%'], center: ['58%', '50%'],
         avoidLabelOverlap: true,
-        itemStyle: {{ borderRadius: 6, borderColor: '#fff', borderWidth: 2 }},
-        label: {{ show: true, formatter: '{{b}}\n{{d}}%', color: '#2f4058', fontSize: 12, lineHeight: 17 }},
-        labelLine: {{ length: 10, length2: 10 }},
-        emphasis: {{ scale: true, scaleSize: 6, label: {{ fontSize: 14, fontWeight: 'bold' }} }},
-        data: pie.map(function (d) {{ return {{ name: d.name, value: d.value }}; }})
-      }}],
+        itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}\n{d}%', color: '#2f4058', fontSize: 12, lineHeight: 17 },
+        labelLine: { length: 10, length2: 10 },
+        emphasis: { scale: true, scaleSize: 6, label: { fontSize: 14, fontWeight: 'bold' } },
+        data: pie.map(function (d) { return { name: d.name, value: d.value }; })
+      }],
       graphic: [
-        {{ type: 'text', left: '58%', top: '45%', style: {{ text: '出货总额', textAlign: 'center', fill: '#7f8da1', fontSize: 11 }} }},
-        {{ type: 'text', left: '58%', top: '51%', style: {{ text: total.toLocaleString('zh-CN'), textAlign: 'center', fill: '#101828', fontSize: 17, fontWeight: 'bold' }} }}
+        { type: 'text', left: '58%', top: '45%', style: { text: '出货总额', textAlign: 'center', fill: '#7f8da1', fontSize: 11 } },
+        { type: 'text', left: '58%', top: '51%', style: { text: total.toLocaleString('zh-CN'), textAlign: 'center', fill: '#101828', fontSize: 17, fontWeight: 'bold' } }
       ]
-    }};
-  }}
+    };
+  }
   return null;
-}}
+}
 
 /* ---------- §9.2 实例生命周期 ---------- */
 let activeChart = null;
 let resizeBound = false;
 
-function renderChart(p) {{
+function renderChart(p) {
   const block = document.getElementById('chart-block');
   const dom = document.getElementById('chart');
   const opt = buildChartOption(p);
 
-  if (!opt || !window.echarts) {{
+  if (!opt || !window.echarts) {
     block.hidden = true;
-    if (activeChart) {{ try {{ activeChart.dispose(); }} catch (e) {{}} activeChart = null; }}
+    if (activeChart) { try { activeChart.dispose(); } catch (e) {} activeChart = null; }
     return;
-  }}
+  }
   document.getElementById('chart-title').textContent = p.chart_title || '';
   document.getElementById('chart-sub').textContent = p.chart_sub || '';
   block.hidden = false;                       /* 先显示，避免容器 0 尺寸初始化 */
-  if (activeChart && activeChart.getDom() !== dom) {{
-    try {{ activeChart.dispose(); }} catch (e) {{}}
+  if (activeChart && activeChart.getDom() !== dom) {
+    try { activeChart.dispose(); } catch (e) {}
     activeChart = null;
-  }}
+  }
   if (!activeChart) activeChart = echarts.init(dom);
   activeChart.setOption(opt, true);
   activeChart.resize();
   dom.setAttribute('aria-label', (p.chart_title || '数据图表') + '，' + (p.chart_sub || ''));
-  if (!resizeBound) {{
-    window.addEventListener('resize', function () {{ if (activeChart) activeChart.resize(); }});
+  if (!resizeBound) {
+    window.addEventListener('resize', function () { if (activeChart) activeChart.resize(); });
     resizeBound = true;
-  }}
-}}
+  }
+}
 
 /* ---------- §8 模块状态机 idle → loading → success ---------- */
-function skelHTML() {{
+function skelHTML() {
   let s = '<div class="skel" role="status" aria-live="polite"><span class="sr-only">正在加载数据…</span>';
   for (let i = 0; i < 5; i++) s += '<div class="skel-row"></div>';
   return s + '</div>';
-}}
-function emptyHTML(title, desc) {{
+}
+function emptyHTML(title, desc) {
   return '<div class="state"><div class="state-title">' + title + '</div><div class="state-desc">' + desc + '</div></div>';
-}}
+}
 
-function setState(state, payload) {{
+function setState(state, payload) {
   const box = document.getElementById('module-state');
   const table = document.getElementById('item-table');
-  if (state === 'loading') {{
+  if (state === 'loading') {
     box.innerHTML = skelHTML(); table.hidden = true; return;
-  }}
-  if (state === 'success') {{
+  }
+  if (state === 'success') {
     box.innerHTML = ''; table.hidden = false;
     table.innerHTML = '<div style="overflow-x:auto">' + payload + '</div>'; return;
-  }}
-  if (state === 'empty') {{
+  }
+  if (state === 'empty') {
     table.hidden = true;
     box.innerHTML = emptyHTML('暂无数据', '当前筛选条件下没有记录，试试调整筛选或新建记录。'); return;
-  }}
-  if (state === 'error') {{
+  }
+  if (state === 'error') {
     table.hidden = true;
     box.innerHTML = '<div class="state"><div class="state-title">数据加载失败</div>'
       + '<div class="state-desc">请检查网络后重试，若持续失败请联系数据管理员。</div>'
       + '<button type="button" class="btn" onclick="retryCurrent()">重试</button></div>';
-  }}
-}}
+  }
+}
 
 let currentKey = null;
-function retryCurrent() {{ if (currentKey) showItem(currentKey); }}
+function retryCurrent() { if (currentKey) showItem(currentKey); }
 
 /* ---------- 导航 / 视图切换 ---------- */
-function setActiveNav(key) {{
+function setActiveNav(key) {
   document.getElementById('nav-home').removeAttribute('aria-current');
-  document.querySelectorAll('.nav-item').forEach(function (el) {{
+  document.querySelectorAll('.nav-item').forEach(function (el) {
     if (el.dataset.key === key) el.setAttribute('aria-current', 'page');
     else el.removeAttribute('aria-current');
-  }});
-}}
+  });
+}
 
-function showHome() {{
+function showHome() {
   document.getElementById('view-home').hidden = false;
   document.getElementById('view-item').hidden = true;
   document.getElementById('main-title').textContent = '分销操作台 · 团队工作台';
   document.getElementById('main-sub').textContent = '数据截至 2026-09-16 24:00 ｜ 覆盖 2026 年 1–12 月 ｜ 来源：分销业务数据看板';
   document.getElementById('chart-block').hidden = true;
-  if (activeChart) {{ try {{ activeChart.dispose(); }} catch (e) {{}} activeChart = null; }}
+  if (activeChart) { try { activeChart.dispose(); } catch (e) {} activeChart = null; }
   currentKey = null;
   document.getElementById('nav-home').setAttribute('aria-current', 'page');
-  document.querySelectorAll('.nav-item').forEach(function (el) {{ el.removeAttribute('aria-current'); }});
-}}
+  document.querySelectorAll('.nav-item').forEach(function (el) { el.removeAttribute('aria-current'); });
+}
 
-function showItem(key) {{
+function showItem(key) {
   const p = PANELS[key];
   if (!p) return;
   currentKey = key;
@@ -792,27 +791,28 @@ function showItem(key) {{
   document.getElementById('item-desc').textContent = p.desc;
 
   const tb = document.getElementById('item-toolbar');
-  tb.innerHTML = p.toolbar.map(function (t, i) {{
+  tb.innerHTML = p.toolbar.map(function (t, i) {
     return '<button type="button" class="btn' + (i === 0 ? ' btn-primary' : '') + '">' + t + '</button>';
-  }}).join('');
+  }).join('');
 
-  function finish() {{
+  function finish() {
+    // 先注入表格，再统计行数（顺序不能颠倒，否则永远统计到空表）
+    setState('success', p.table);
     const n = document.querySelectorAll('#item-table tbody tr').length;
-    if (!n) {{ setState('empty'); }}
-    else {{ setState('success', p.table); }}
+    if (!n) { setState('empty'); }
     document.getElementById('item-count').textContent = '共 ' + n + ' 条记录';
     document.getElementById('item-section').textContent = p.section;
     renderChart(p);
-  }}
+  }
 
   setActiveNav(key);
-  if (reduceMotion) {{ finish(); }}
-  else {{ setState('loading'); setTimeout(finish, 180); }}   /* 真实反馈闭环，§10 内容切换 ~180ms */
-}}
+  if (reduceMotion) { finish(); }
+  else { setState('loading'); setTimeout(finish, 180); }   /* 真实反馈闭环，§10 内容切换 ~180ms */
+}
 
 /* ---------- §7.6 抽屉 ---------- */
 let lastFocus = null;
-function openDrawer() {{
+function openDrawer() {
   lastFocus = document.activeElement;
   const d = document.getElementById('drawer');
   const p = currentKey ? PANELS[currentKey] : null;
@@ -820,35 +820,35 @@ function openDrawer() {{
   document.getElementById('drawer-sub').textContent = p ? (p.name + ' · 只读预览') : '';
   const firstRow = document.querySelector('#item-table tbody tr');
   let kv = '';
-  if (p && firstRow) {{
+  if (p && firstRow) {
     const cells = firstRow.querySelectorAll('td');
-    p.cols.forEach(function (c, i) {{
+    p.cols.forEach(function (c, i) {
       const v = cells[i] ? cells[i].textContent.trim() : '—';
       kv += '<dt>' + c + '</dt><dd>' + v + '</dd>';
-    }});
-  }}
+    });
+  }
   document.getElementById('drawer-kv').innerHTML = kv || '<dt>提示</dt><dd>暂无可用记录</dd>';
   d.setAttribute('aria-hidden', 'false');
   d.dataset.open = '1';
   document.getElementById('overlay').dataset.open = '1';
   const btn = d.querySelector('.drawer-close');
   if (btn) btn.focus();
-}}
-function closeDrawer() {{
+}
+function closeDrawer() {
   const d = document.getElementById('drawer');
   d.removeAttribute('data-open');
   d.setAttribute('aria-hidden', 'true');
   document.getElementById('overlay').removeAttribute('data-open');
   if (lastFocus && lastFocus.focus) lastFocus.focus();
-}}
-document.addEventListener('keydown', function (e) {{
-  if (e.key === 'Escape') {{
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
     if (document.getElementById('drawer').dataset.open === '1') closeDrawer();
-  }}
-}});
+  }
+});
 
 /* ---------- §8 页面级刷新反馈 ---------- */
-function doRefresh() {{
+function doRefresh() {
   const b = document.getElementById('fb-refresh');
   const t = document.getElementById('fb-text');
   const dot = document.getElementById('fb-dot');
@@ -857,12 +857,12 @@ function doRefresh() {{
   b.disabled = true;
   t.textContent = '正在同步数据…';
   dot.style.background = 'var(--color-warning)';
-  setTimeout(function () {{
+  setTimeout(function () {
     b.dataset.busy = '0'; b.disabled = false;
     t.textContent = '数据已同步 · 数据截至 2026-09-16 24:00';
     dot.style.background = 'var(--color-success)';
-  }}, 900);
-}}
+  }, 900);
+}
 
 document.addEventListener('DOMContentLoaded', showHome);
 </script>
